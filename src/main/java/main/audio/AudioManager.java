@@ -37,6 +37,36 @@ public class AudioManager {
         }
     }
 
+    /**
+     * Metodo che fa partire una traccia audio
+     */
+    public void startTrack() {
+        currentTrack.start();
+    }
+
+    /**
+     * Metodo che mette in pausa una traccia audio
+     */
+    public void pauseTrack() {
+        currentTrack.pause();
+    }
+
+    /**
+     * Metodo che riprende la riproduzione della traccia audio
+     */
+    public void resumeTrack() {
+        currentTrack.resume();
+    }
+
+    /**
+     * Metodo che ferma la riproduzione della clip audio
+     */
+    public void stopTrack() {
+        currentTrack.stop();
+        currentTrack = null;
+    }
+
+    //Getter
     public AudioTrack getCurrentTrack() {
         return currentTrack;
     }

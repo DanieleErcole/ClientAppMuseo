@@ -47,10 +47,11 @@ public class AudioTrack {
      * Metodo che inizia la riproduzione della traccia
      */
     public void start() {
-        assert thisStream != null : "audioStream not initialized";
-        if(isLooped)
-            thisClip.loop(Clip.LOOP_CONTINUOUSLY);
-        thisClip.start();
+        if(thisStream != null) {
+            if(isLooped)
+                thisClip.loop(Clip.LOOP_CONTINUOUSLY);
+            thisClip.start();
+        }
     }
 
     /**
