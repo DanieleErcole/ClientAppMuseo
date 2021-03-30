@@ -31,7 +31,7 @@ public class DataManager {
         stream = httpConnection.getInputStream();
 
         ObjectMapper mapper = new ObjectMapper();
-        return dataClass.cast(mapper.readValue(stream, dataClass));
+        return mapper.readValue(stream, dataClass);
     }
 
 }
