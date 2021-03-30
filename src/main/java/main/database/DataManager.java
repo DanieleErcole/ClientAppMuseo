@@ -12,10 +12,10 @@ import java.util.Map;
 public class DataManager {
 
     private final String hostname;
-    private final URL url; // request-script.php
+    private final String url; // request-script.php
     private HttpURLConnection httpConnection;
 
-    public DataManager(String hostname, URL url) {
+    public DataManager(String hostname, String url) {
         this.hostname = hostname;
         this.url = url;
     }
@@ -26,7 +26,7 @@ public class DataManager {
             requestUrl.append(e.getKey()).append("=").append(e.getValue());
 
         InputStream stream;
-        httpConnection = (HttpURLConnection) url.openConnection();
+        httpConnection = (HttpURLConnection) new URL(url).openConnection();
         httpConnection.setRequestProperty("accept", "application/json");
         stream = httpConnection.getInputStream();
 
