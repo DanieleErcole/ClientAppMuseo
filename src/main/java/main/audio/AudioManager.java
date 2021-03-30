@@ -4,11 +4,6 @@ import javax.sound.sampled.*;
 import java.io.IOException;
 import java.net.URL;
 
-/**
- * Classe che gestisce la riproduzione dei suoni SOLO FILE .WAV
- * @author Daniele Pelizzoni
- */
-
 public class AudioManager {
 
     private final Mixer mixer;

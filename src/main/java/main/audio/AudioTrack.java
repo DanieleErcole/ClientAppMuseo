@@ -4,11 +4,6 @@ import javax.sound.sampled.*;
 import java.io.IOException;
 import java.net.URL;
 
-/**
- * Classe che rappresenta una generica traccia audio
- * @author Daniele Pelizzoni
- */
-
 public class AudioTrack {
 
     private final URL clipURL;
