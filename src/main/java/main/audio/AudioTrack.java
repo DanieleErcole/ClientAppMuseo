@@ -38,9 +38,6 @@ public class AudioTrack {
         currentFrame = 0L;
     }
 
-    /**
-     * Metodo che inizia la riproduzione della traccia
-     */
     public void start() {
         if(thisStream != null) {
             if(isLooped)
@@ -49,17 +46,11 @@ public class AudioTrack {
         }
     }
 
-    /**
-     * Metodo che mette in pausa la traccia
-     */
     public void pause() {
         currentFrame = thisClip.getMicrosecondPosition();
         thisClip.stop();
     }
 
-    /**
-     * Metodo che riprende la riproduzione della traccia
-     */
     public void resume() {
         if(!thisClip.isOpen() || !thisClip.isActive()) {
             thisClip.close();
@@ -76,9 +67,6 @@ public class AudioTrack {
         }
     }
 
-    /**
-     * Metodo che ferma la riproduzione della traccia
-     */
     public void stop() {
         if(thisClip.isRunning() || thisClip.isActive() || thisClip.isOpen()) {
             thisClip.stop();
