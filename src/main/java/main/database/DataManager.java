@@ -12,7 +12,7 @@ import java.util.Map;
 public class DataManager {
 
     private final String hostname;
-    private final String url; // request-script.php
+    private String url; //request-script.php
     private HttpURLConnection httpConnection;
 
     public DataManager(String hostname, String url) {
@@ -26,12 +26,20 @@ public class DataManager {
             requestUrl.append(e.getKey()).append("=").append(e.getValue());
 
         InputStream stream;
-        httpConnection = (HttpURLConnection) new URL(url).openConnection();
+        httpConnection = (HttpURLConnection) new URL(requestUrl.toString()).openConnection();
         httpConnection.setRequestProperty("accept", "application/json");
         stream = httpConnection.getInputStream();
 
         ObjectMapper mapper = new ObjectMapper();
-        return mapper.readValue(stream, dataClass);
+        T object = mapper.readValue(stream, dataClass);
+        stream.close();
+        httpConnection.disconnect();
+        return object;
+    }
+
+    //Setter
+    public void setURL(String url) {
+        this.url = url;
     }
 
 }
