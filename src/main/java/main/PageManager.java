@@ -25,4 +25,8 @@ public class PageManager {
         return rootPage;
     }
 
+    public DataManager getDataManager() {
+        return dataManager;
+    }
+
 }

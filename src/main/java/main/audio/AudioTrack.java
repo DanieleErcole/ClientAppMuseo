@@ -84,4 +84,12 @@ public class AudioTrack {
         return volume;
     }
 
+    public Clip getThisClip() {
+        return thisClip;
+    }
+
+    public long getCurrentFrame() {
+        return currentFrame;
+    }
+
 }

@@ -14,11 +14,17 @@ import javax.swing.*;
 public class RootPage extends JFrame {
 
     private ImageIcon playImg;
+    private ImageIcon pauseImg;
+    private ImageIcon stopImg;
     private ImageIcon precImg;
     private ImageIcon nextImg;
     private ImageIcon playImgHover;
+    private ImageIcon pauseImgHover;
+    private ImageIcon stopImgHover;
     private ImageIcon precImgHover;
     private ImageIcon nextImgHover;
+
+    private boolean isAudioPaused;
 
     /**
      * Creates new form RootPage
@@ -39,6 +45,7 @@ public class RootPage extends JFrame {
         centerButton.setIcon(playImg);
         precButton.setIcon(precImg);
         nextButton.setIcon(nextImg);
+        isAudioPaused = true;
         
         this.pack();
         this.setLocationRelativeTo(null);
@@ -280,11 +287,15 @@ public class RootPage extends JFrame {
     }
 
     private void centerButtonMouseEntered(java.awt.event.MouseEvent evt) {
-        centerButton.setIcon(playImgHover);
+        if(isAudioPaused)
+            centerButton.setIcon(playImgHover);
+        else centerButton.setIcon(pauseImgHover);
     }
 
     private void centerButtonMouseExited(java.awt.event.MouseEvent evt) {
-        centerButton.setIcon(playImg);
+        if(isAudioPaused)
+            centerButton.setIcon(playImg);
+        else centerButton.setIcon(pauseImg);
     }
 
     private void precButtonMouseEntered(java.awt.event.MouseEvent evt) {
@@ -318,4 +329,33 @@ public class RootPage extends JFrame {
     private javax.swing.JSlider timeSlider;
     private javax.swing.JLabel titleLabel;
     // End of variables declaration//GEN-END:variables
+
+    public JButton getCenterButton() {
+        return centerButton;
+    }
+
+    public JLabel getLeftTimeLabel() {
+        return leftTimeLabel;
+    }
+
+    public JLabel getRightTimeLabel() {
+        return rightTimeLabel;
+    }
+
+    public JSlider getTimeSlider() {
+        return timeSlider;
+    }
+
+    public JLabel getTitleLabel() {
+        return titleLabel;
+    }
+
+    public boolean isAudioPaused() {
+        return isAudioPaused;
+    }
+
+    public void setAudioPaused(boolean audioPaused) {
+        isAudioPaused = audioPaused;
+    }
+
 }
