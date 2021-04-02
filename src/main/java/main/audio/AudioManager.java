@@ -1,5 +1,9 @@
 package main.audio;
 
+import main.events.AudioSliderListener;
+import main.events.AudioTimerListener;
+import main.pages.RootPage;
+
 import javax.sound.sampled.*;
 import javax.swing.*;
 import java.io.IOException;
@@ -9,7 +13,9 @@ public class AudioManager {
 
     private final Mixer mixer;
     private AudioTrack currentTrack;
-    private AudioTask task;
+
+    private AudioTimerListener audioTimerListener;
+    private Timer audioTimer;
 
     /**
      * Costruttore degli oggetti di classe AudioManager
@@ -19,27 +25,37 @@ public class AudioManager {
         mixer = AudioSystem.getMixer(infos[3]);
     }
 
+    public void initAudioTimer(RootPage root, AudioSliderListener audioSliderListener) {
+        audioTimerListener = new AudioTimerListener(audioSliderListener, this, root);
+        audioTimer = new Timer(100, audioTimerListener);
+    }
+
     /**
      * Metodo che fa partire la clip audio con il nome dato
      * @param path -> nome della clip audio
      * @param isLooped -> flag che identifica se l'audio deve essere riprodotto in loop
      */
-    public void addTrack(String path, JSlider slider, boolean isLooped) {
+    public void addTrack(URL path, boolean isLooped) {
         try {
             DataLine.Info dataInfo = new DataLine.Info(Clip.class, null);
-            currentTrack = new AudioTrack((Clip) mixer.getLine(dataInfo), AudioSystem.getAudioInputStream(new URL(path)),.02f, isLooped, new URL(path));
-            //tracks.put(clipName, new AudioTrack((Clip) mixer.getLine(dataInfo), AudioSystem.getAudioInputStream(Assets.getSounds().get(clipName)),.02f, isLooped, clipName));
+            currentTrack = new AudioTrack((Clip) mixer.getLine(dataInfo), AudioSystem.getAudioInputStream(path),.02f, isLooped, path);
         } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
             e.printStackTrace();
             return;
         }
-        task = new AudioTask(currentTrack.getThisClip(), slider);
+        currentTrack.getThisClip().addLineListener(new LineListener() {
+            @Override
+            public void update(LineEvent event) {
+                if(event.getType().equals(LineEvent.Type.STOP) || event.getType().equals(LineEvent.Type.CLOSE)) {
+                    audioTimer.stop();
+                }
+            }
+        });
     }
 
     public void startTrack() {
         currentTrack.start();
-        task.setRunning(true);
-        task.start();
+        audioTimer.start();
     }
 
     public void pauseTrack() {
@@ -52,9 +68,7 @@ public class AudioManager {
 
     public void stopTrack() {
         currentTrack.stop();
-        task.setRunning(false);
-        currentTrack = null;
-        task = null;
+        currentTrack = null;;
     }
 
     //Getter

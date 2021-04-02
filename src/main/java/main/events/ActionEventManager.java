@@ -45,7 +45,11 @@ public class ActionEventManager implements ActionListener {
         } else if(command.equals("selectionRoom")) {
 
         } else if(command.equals("audioStart")) {
-
+            //TODO: trovare un modo per prendere il nome della traccia
+            pageManager.getRootPage().setAudioPaused(false);
+            audioManager.addTrack(getClass().getResource("/AudioTest/Hollow Knight - Sealed Vessel - Path of Pain Music.wav"), false);
+            pageManager.getRootPage().getTimeSlider().setMaximum(audioManager.getCurrentTrack().getThisClip().getFrameLength());
+            audioManager.startTrack();
         } else if(command.equals("audioPause")) {
 
         } else if(command.equals("audioResume")) {

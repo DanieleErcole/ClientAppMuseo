@@ -3,6 +3,7 @@ package main.pages;
 
 import main.PageManager;
 import main.audio.AudioManager;
+import main.events.AudioSliderListener;
 
 import java.awt.*;
 import javax.swing.*;

@@ -11,7 +11,7 @@ public class AudioTrack {
     private AudioInputStream thisStream;
 
     private float volume;
-    private long currentFrame;
+    private int currentFrame;
     private final boolean isLooped;
 
     /**
@@ -35,7 +35,7 @@ public class AudioTrack {
         } catch (LineUnavailableException | IOException e) {
             e.printStackTrace();
         }
-        currentFrame = 0L;
+        currentFrame = 0;
     }
 
     public void start() {
@@ -47,7 +47,7 @@ public class AudioTrack {
     }
 
     public void pause() {
-        currentFrame = thisClip.getMicrosecondPosition();
+        currentFrame = thisClip.getFramePosition();
         thisClip.stop();
     }
 
@@ -62,7 +62,7 @@ public class AudioTrack {
             } catch (LineUnavailableException | UnsupportedAudioFileException | IOException e) {
                 e.printStackTrace();
             }
-            thisClip.setMicrosecondPosition(currentFrame);
+            thisClip.setFramePosition(currentFrame);
             thisClip.start();
         }
     }
@@ -88,8 +88,16 @@ public class AudioTrack {
         return thisClip;
     }
 
-    public long getCurrentFrame() {
+    public boolean isLooped() {
+        return isLooped;
+    }
+
+    public int getCurrentFrame() {
         return currentFrame;
+    }
+
+    public void setCurrentFrame(int currentFrame) {
+        this.currentFrame = currentFrame;
     }
 
 }
