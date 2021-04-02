@@ -37,9 +37,11 @@ public class RootPage extends JFrame {
         playImg = new ImageIcon(new ImageIcon(getClass().getResource("/playBtnImg.png")).getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH));
         precImg = new ImageIcon(new ImageIcon(getClass().getResource("/precBtnImg.png")).getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH));
         nextImg = new ImageIcon(new ImageIcon(getClass().getResource("/nextBtnImg.png")).getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH));
+        pauseImg = new ImageIcon(new ImageIcon(getClass().getResource("/pauseBtnImg.png")).getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH));
         playImgHover = new ImageIcon(new ImageIcon(getClass().getResource("/playBtnImgHover.png")).getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH));
         precImgHover = new ImageIcon(new ImageIcon(getClass().getResource("/precBtnImgHover.png")).getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH));
         nextImgHover = new ImageIcon(new ImageIcon(getClass().getResource("/nextBtnImgHover.png")).getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH));
+        pauseImgHover = new ImageIcon(new ImageIcon(getClass().getResource("/pauseBtnImgHover.png")).getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH));
         
         //this.setMinimumSize(windowDimension);
         initComponents();
