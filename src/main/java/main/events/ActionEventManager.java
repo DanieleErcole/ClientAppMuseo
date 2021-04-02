@@ -36,10 +36,8 @@ public class ActionEventManager implements ActionListener {
             else if(command.endsWith("initial"))
                 page = new InitialPage(audioManager, pageManager, "initial");
 
-            if(page != null) {
-                page.initPage(audioManager, pageManager, pageManager.getDataManager());
+            if(page != null)
                 pageManager.changePage(page, audioManager);
-            }
         } else if(command.equals("login")) {
 
         } else if(command.equals("signup")) {
