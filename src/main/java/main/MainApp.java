@@ -3,52 +3,42 @@ package main;
 import com.formdev.flatlaf.FlatDarkLaf;
 import main.audio.AudioManager;
 import main.events.AudioSliderListener;
-import main.pages.InitialPage;
-import main.pages.LoginPage;
-import main.pages.RootPage;
-import main.pages.SignUpPage;
+import main.events.MouseSliderListener;
+import main.pages.*;
 
-import javax.sound.sampled.LineEvent;
-import javax.sound.sampled.LineListener;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
 
 public class MainApp {
 
     private final PageManager pageManager;
     private final AudioManager audioManager;
     private final AudioSliderListener changeListener;
-
-    public static boolean clicked = false;
-    public static int valueClicked = 0;
+    private final MouseSliderListener mouseSliderListener;
 
     public MainApp() {
         audioManager = new AudioManager();
         pageManager = new PageManager(audioManager);
-        changeListener = new AudioSliderListener(audioManager);
+        mouseSliderListener = new MouseSliderListener(pageManager);
+        changeListener = new AudioSliderListener(audioManager, mouseSliderListener);
     }
 
     public void startApplication() {
-        InitialPage initial = new InitialPage(audioManager, pageManager, "initial");
-        pageManager.changePage(initial, audioManager);
-        pageManager.getRootPage().getTimeSlider().addChangeListener(changeListener);
-        pageManager.getRootPage().getTimeSlider().addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseReleased(MouseEvent e) {
-                if(!MainApp.clicked) {
-                    MainApp.clicked = true;
-                    MainApp.valueClicked = pageManager.getRootPage().getTimeSlider().getValue();
-                }
-            }
+        //InitialPage initial = new InitialPage(audioManager, pageManager, "initial");
+        //pageManager.changePage(initial, audioManager);
+        PaginaInformazioniReperto findInfo = new PaginaInformazioniReperto(audioManager, pageManager, 0);
+        pageManager.changePage(findInfo, audioManager);
 
-            @Override
-            public void mousePressed(MouseEvent e) {
-                MainApp.clicked = true;
-                MainApp.valueClicked = pageManager.getRootPage().getTimeSlider().getValue();
-            }
-        });
+        pageManager.getRootPage().getTimeSlider().addChangeListener(changeListener);
+        pageManager.getRootPage().getTimeSlider().addMouseListener(mouseSliderListener);
         audioManager.initAudioTimer(pageManager.getRootPage(), changeListener);
+
+        //TODO: test audio
+        pageManager.getRootPage().setAudioPaused(false);
+        audioManager.addTrack(getClass().getResource("/AudioTest/Hollow Knight - Sealed Vessel - Path of Pain Music.wav"), false);
+        pageManager.getRootPage().getTimeSlider().setMaximum(audioManager.getCurrentTrack().getThisClip().getFrameLength());
+        audioManager.startTrack();
+
         /*root.getContentPane().setSize(800, 600);
         root.getContentPane().setPreferredSize(new Dimension(800, 600));
         root.pack();

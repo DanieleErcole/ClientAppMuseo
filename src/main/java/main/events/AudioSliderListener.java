@@ -13,10 +13,12 @@ import java.awt.event.ActionListener;
 public class AudioSliderListener implements ChangeListener {
 
     private final AudioManager audioManager;
+    private final MouseSliderListener mouseSliderListener;
     private boolean ignore;
 
-    public AudioSliderListener(AudioManager audioManager) {
+    public AudioSliderListener(AudioManager audioManager, MouseSliderListener mouseSliderListener) {
         this.audioManager = audioManager;
+        this.mouseSliderListener = mouseSliderListener;
         ignore = false;
     }
 
@@ -24,14 +26,14 @@ public class AudioSliderListener implements ChangeListener {
     public void stateChanged(ChangeEvent e) {
         JSlider slider = (JSlider) e.getSource();
         if(ignore) {
-            if(MainApp.clicked) {
+            if(mouseSliderListener.isClicked()) {
                 audioManager.pauseTrack();
                 Timer delayed = new Timer(25, new ActionListener() {
                     @Override
                     public synchronized void actionPerformed(ActionEvent e) {
-                        audioManager.getCurrentTrack().setCurrentFrame(MainApp.valueClicked);
-                        slider.setValue(MainApp.valueClicked);
-                        MainApp.clicked = false;
+                        audioManager.getCurrentTrack().setCurrentFrame(mouseSliderListener.getValueClicked());
+                        slider.setValue(mouseSliderListener.getValueClicked());
+                        mouseSliderListener.setClicked(false);
                         audioManager.startTrack();
                     }
                 });

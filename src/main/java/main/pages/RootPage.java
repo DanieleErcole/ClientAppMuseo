@@ -34,20 +34,23 @@ public class RootPage extends JFrame {
         super("Museo");
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-        playImg = new ImageIcon(new ImageIcon(getClass().getResource("/playBtnImg.png")).getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH));
+        playImg = new ImageIcon(new ImageIcon(getClass().getResource("/playBtnImg.png")).getImage().getScaledInstance(38, 38, Image.SCALE_SMOOTH));
         precImg = new ImageIcon(new ImageIcon(getClass().getResource("/precBtnImg.png")).getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH));
         nextImg = new ImageIcon(new ImageIcon(getClass().getResource("/nextBtnImg.png")).getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH));
-        pauseImg = new ImageIcon(new ImageIcon(getClass().getResource("/pauseBtnImg.png")).getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH));
-        playImgHover = new ImageIcon(new ImageIcon(getClass().getResource("/playBtnImgHover.png")).getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH));
+        pauseImg = new ImageIcon(new ImageIcon(getClass().getResource("/pauseBtnImg.png")).getImage().getScaledInstance(38, 38, Image.SCALE_SMOOTH));
+        stopImg = new ImageIcon(new ImageIcon(getClass().getResource("/stopBtnImg.png")).getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH));
+        playImgHover = new ImageIcon(new ImageIcon(getClass().getResource("/playBtnImgHover.png")).getImage().getScaledInstance(38, 38, Image.SCALE_SMOOTH));
         precImgHover = new ImageIcon(new ImageIcon(getClass().getResource("/precBtnImgHover.png")).getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH));
         nextImgHover = new ImageIcon(new ImageIcon(getClass().getResource("/nextBtnImgHover.png")).getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH));
-        pauseImgHover = new ImageIcon(new ImageIcon(getClass().getResource("/pauseBtnImgHover.png")).getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH));
+        pauseImgHover = new ImageIcon(new ImageIcon(getClass().getResource("/pauseBtnImgHover.png")).getImage().getScaledInstance(38, 38, Image.SCALE_SMOOTH));
+        stopImgHover = new ImageIcon(new ImageIcon(getClass().getResource("/stopBtnImgHover.png")).getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH));
         
         //this.setMinimumSize(windowDimension);
         initComponents();
         centerButton.setIcon(playImg);
         precButton.setIcon(precImg);
         nextButton.setIcon(nextImg);
+        stopButton.setIcon(stopImg);
         isAudioPaused = true;
         
         this.pack();
@@ -76,6 +79,7 @@ public class RootPage extends JFrame {
         nextButton = new javax.swing.JButton();
         titleLabel = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
+        stopButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -121,6 +125,7 @@ public class RootPage extends JFrame {
         );
 
         audioBar.setBackground(new java.awt.Color(28, 28, 28));
+        audioBar.setPreferredSize(new java.awt.Dimension(1250, 75));
 
         timeSlider.setValue(0);
         timeSlider.setFocusable(false);
@@ -176,8 +181,18 @@ public class RootPage extends JFrame {
         titleLabel.setText("Titolo traccia");
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("bandiera");
-        jLabel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255)));
+        jLabel1.setPreferredSize(new java.awt.Dimension(46, 33));
+
+        stopButton.setBorderPainted(false);
+        stopButton.setContentAreaFilled(false);
+        stopButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                stopButtonMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                stopButtonMouseExited(evt);
+            }
+        });
 
         javax.swing.GroupLayout audioBarLayout = new javax.swing.GroupLayout(audioBar);
         audioBar.setLayout(audioBarLayout);
@@ -186,7 +201,7 @@ public class RootPage extends JFrame {
                         .addGroup(audioBarLayout.createSequentialGroup()
                                 .addGroup(audioBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addGroup(audioBarLayout.createSequentialGroup()
-                                                .addContainerGap(159, Short.MAX_VALUE)
+                                                .addContainerGap(161, Short.MAX_VALUE)
                                                 .addComponent(leftTimeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                 .addComponent(timeSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 830, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -197,29 +212,34 @@ public class RootPage extends JFrame {
                                                 .addGap(14, 14, 14)
                                                 .addComponent(titleLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                .addComponent(precButton, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(precButton, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addGap(18, 18, 18)
-                                                .addComponent(centerButton, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(centerButton, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addGap(18, 18, 18)
-                                                .addComponent(nextButton, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGap(462, 462, 462)))
-                                .addComponent(jLabel1)
+                                                .addComponent(nextButton, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(29, 29, 29)
+                                                .addComponent(stopButton, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(406, 406, 406)))
+                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(26, 26, 26))
         );
         audioBarLayout.setVerticalGroup(
                 audioBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                         .addGroup(audioBarLayout.createSequentialGroup()
                                 .addGroup(audioBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, audioBarLayout.createSequentialGroup()
+                                                .addGap(0, 7, Short.MAX_VALUE)
+                                                .addComponent(stopButton, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(10, 10, 10))
                                         .addGroup(audioBarLayout.createSequentialGroup()
                                                 .addGap(4, 4, 4)
-                                                .addGroup(audioBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                        .addComponent(nextButton, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
-                                                        .addComponent(centerButton, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
-                                                        .addComponent(titleLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                        .addGroup(audioBarLayout.createSequentialGroup()
-                                                .addContainerGap()
-                                                .addComponent(precButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                                .addGap(1, 1, 1)
+                                                .addGroup(audioBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addComponent(precButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                        .addGroup(audioBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                                .addComponent(nextButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                                .addComponent(centerButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                                .addComponent(titleLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                                .addGap(1, 1, 1)))
                                 .addGroup(audioBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addComponent(leftTimeLabel, javax.swing.GroupLayout.Alignment.TRAILING)
                                         .addComponent(timeSlider, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -317,6 +337,14 @@ public class RootPage extends JFrame {
         nextButton.setIcon(nextImg);
     }
 
+    private void stopButtonMouseEntered(java.awt.event.MouseEvent evt) {
+        stopButton.setIcon(stopImgHover);
+    }
+
+    private void stopButtonMouseExited(java.awt.event.MouseEvent evt) {
+        stopButton.setIcon(stopImg);
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel audioBar;
     private javax.swing.JButton centerButton;
@@ -331,6 +359,7 @@ public class RootPage extends JFrame {
     private javax.swing.JScrollPane rootPanel;
     private javax.swing.JSlider timeSlider;
     private javax.swing.JLabel titleLabel;
+    private javax.swing.JButton stopButton;
     // End of variables declaration//GEN-END:variables
 
     public JButton getCenterButton() {

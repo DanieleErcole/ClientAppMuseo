@@ -1,5 +1,6 @@
 package main.audio;
 
+import main.database.Reperto;
 import main.events.AudioSliderListener;
 import main.events.AudioTimerListener;
 import main.pages.RootPage;
@@ -12,9 +13,8 @@ import java.net.URL;
 public class AudioManager {
 
     private final Mixer mixer;
+    private Reperto find;
     private AudioTrack currentTrack;
-
-    private AudioTimerListener audioTimerListener;
     private Timer audioTimer;
 
     /**
@@ -26,7 +26,7 @@ public class AudioManager {
     }
 
     public void initAudioTimer(RootPage root, AudioSliderListener audioSliderListener) {
-        audioTimerListener = new AudioTimerListener(audioSliderListener, this, root);
+        AudioTimerListener audioTimerListener = new AudioTimerListener(audioSliderListener, this, root);
         audioTimer = new Timer(100, audioTimerListener);
     }
 
@@ -74,6 +74,15 @@ public class AudioManager {
     //Getter
     public AudioTrack getCurrentTrack() {
         return currentTrack;
+    }
+
+    public Reperto getFind() {
+        return find;
+    }
+
+    //Setter
+    public void setFind(Reperto find) {
+        this.find = find;
     }
 
 }
