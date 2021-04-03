@@ -9,6 +9,7 @@ public class AudioTrack {
     private final URL clipURL;
     private final Clip thisClip;
     private AudioInputStream thisStream;
+    private final int index;
 
     private float volume;
     private int currentFrame;
@@ -21,12 +22,13 @@ public class AudioTrack {
      * @param volume -> livello di volume
      * @param isLooped -> flag che indica se la traccia deve essere riprodotta in loop
      */
-    public AudioTrack(Clip thisClip, AudioInputStream thisStream, float volume, boolean isLooped, URL url) {
+    public AudioTrack(Clip thisClip, AudioInputStream thisStream, float volume, boolean isLooped, URL url, int index) {
         this.thisClip = thisClip;
         this.thisStream = thisStream;
         this.volume = volume;
         this.isLooped = isLooped;
         this.clipURL = url;
+        this.index = index;
         try {
             this.thisClip.open(thisStream);
             //Volume
@@ -96,6 +98,11 @@ public class AudioTrack {
         return currentFrame;
     }
 
+    public int getIndex() {
+        return index;
+    }
+
+    //Setter
     public void setCurrentFrame(int currentFrame) {
         this.currentFrame = currentFrame;
     }

@@ -3,9 +3,10 @@ package main.pages;
 
 import main.PageManager;
 import main.audio.AudioManager;
-import main.events.AudioSliderListener;
+import main.events.ActionEventManager;
 
 import java.awt.*;
+import java.util.HashMap;
 import javax.swing.*;
 
 /**
@@ -25,7 +26,11 @@ public class RootPage extends JFrame {
     private ImageIcon precImgHover;
     private ImageIcon nextImgHover;
 
+    private ImageIcon backImg;
+    private ImageIcon backImgHover;
+
     private boolean isAudioPaused;
+    private HashMap<JButton, ActionEventManager> audioActionlisteners;
 
     /**
      * Creates new form RootPage
@@ -34,16 +39,19 @@ public class RootPage extends JFrame {
         super("Museo");
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
+        audioActionlisteners = new HashMap<>();
         playImg = new ImageIcon(new ImageIcon(getClass().getResource("/playBtnImg.png")).getImage().getScaledInstance(38, 38, Image.SCALE_SMOOTH));
         precImg = new ImageIcon(new ImageIcon(getClass().getResource("/precBtnImg.png")).getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH));
         nextImg = new ImageIcon(new ImageIcon(getClass().getResource("/nextBtnImg.png")).getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH));
         pauseImg = new ImageIcon(new ImageIcon(getClass().getResource("/pauseBtnImg.png")).getImage().getScaledInstance(38, 38, Image.SCALE_SMOOTH));
         stopImg = new ImageIcon(new ImageIcon(getClass().getResource("/stopBtnImg.png")).getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH));
+        backImg = new ImageIcon(new ImageIcon(getClass().getResource("/backBtnImg.png")).getImage().getScaledInstance(18, 18, Image.SCALE_SMOOTH));
         playImgHover = new ImageIcon(new ImageIcon(getClass().getResource("/playBtnImgHover.png")).getImage().getScaledInstance(38, 38, Image.SCALE_SMOOTH));
         precImgHover = new ImageIcon(new ImageIcon(getClass().getResource("/precBtnImgHover.png")).getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH));
         nextImgHover = new ImageIcon(new ImageIcon(getClass().getResource("/nextBtnImgHover.png")).getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH));
         pauseImgHover = new ImageIcon(new ImageIcon(getClass().getResource("/pauseBtnImgHover.png")).getImage().getScaledInstance(38, 38, Image.SCALE_SMOOTH));
         stopImgHover = new ImageIcon(new ImageIcon(getClass().getResource("/stopBtnImgHover.png")).getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH));
+        backImgHover = new ImageIcon(new ImageIcon(getClass().getResource("/backBtnImgHover.png")).getImage().getScaledInstance(18, 18, Image.SCALE_SMOOTH));
         
         //this.setMinimumSize(windowDimension);
         initComponents();
@@ -51,7 +59,13 @@ public class RootPage extends JFrame {
         precButton.setIcon(precImg);
         nextButton.setIcon(nextImg);
         stopButton.setIcon(stopImg);
+        jButton3.setIcon(backImg);
         isAudioPaused = true;
+        centerButton.setActionCommand("audioPause");
+        nextButton.setActionCommand("audioNext");
+        precButton.setActionCommand("audioPrevious");
+        stopButton.setActionCommand("audioStop");
+        stopButton.addActionListener(new ActionEventManager(audioManager, pageManager, 0));
         
         this.pack();
         this.setLocationRelativeTo(null);
@@ -70,6 +84,7 @@ public class RootPage extends JFrame {
         frameBar = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
         audioBar = new javax.swing.JPanel();
         timeSlider = new javax.swing.JSlider();
         leftTimeLabel = new javax.swing.JLabel();
@@ -103,12 +118,25 @@ public class RootPage extends JFrame {
         jButton2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButton2.setFocusPainted(false);
 
+        jButton3.setContentAreaFilled(false);
+        jButton3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jButton3MouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                jButton3MouseExited(evt);
+            }
+        });
+
         javax.swing.GroupLayout frameBarLayout = new javax.swing.GroupLayout(frameBar);
         frameBar.setLayout(frameBarLayout);
         frameBarLayout.setHorizontalGroup(
                 frameBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, frameBarLayout.createSequentialGroup()
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(20, 20, 20)
+                                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jButton2)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jButton1)
@@ -120,7 +148,8 @@ public class RootPage extends JFrame {
                                 .addGap(3, 3, 3)
                                 .addGroup(frameBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                         .addComponent(jButton1)
-                                        .addComponent(jButton2))
+                                        .addComponent(jButton2)
+                                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(3, 3, 3))
         );
 
@@ -281,32 +310,38 @@ public class RootPage extends JFrame {
     }
     
     public void hideAudioBar(int newWidth) {
+        centerButton.removeActionListener(audioActionlisteners.get(centerButton));
+        precButton.removeActionListener(audioActionlisteners.get(precButton));
+        nextButton.removeActionListener(audioActionlisteners.get(nextButton));
+        audioActionlisteners = new HashMap<>();
+
         frameBar.setSize(newWidth, 28);
         frameBar.setPreferredSize(new Dimension(newWidth, 28));
-        rootPanel.setSize(newWidth, 572);
-        rootPanel.setPreferredSize(new Dimension(newWidth, 572));
+        rootPanel.setSize(newWidth, 600);
+        rootPanel.setPreferredSize(new Dimension(newWidth, 600));
         audioBar.setSize(0, 0);
         audioBar.setPreferredSize(new Dimension(0, 0));
-        //System.out.println(frameBar.getWidth()+ " -- " + frameBar.getHeight());
-        //System.out.println(rootPanel.getWidth()+ " --- " + rootPanel.getHeight());
-        
-        jButton1.setLocation(638, 2);
-        jButton2.setLocation(638 + 84, 2);
-        //System.out.println(jButton1.getLocation().x + " - " + jButton1.getLocation().y);
     }
     
-    public void showAudioBar() {
+    public void showAudioBar(AudioManager audioManager, PageManager pageManager) {
+        ActionEventManager listener = new ActionEventManager(audioManager, pageManager, 0);
+        centerButton.addActionListener(new ActionEventManager(audioManager, pageManager, 0));
+        audioActionlisteners.put(centerButton, listener);
+        listener = new ActionEventManager(audioManager, pageManager, audioManager.getCurrentTrack().getIndex());
+        precButton.addActionListener(listener);
+        nextButton.addActionListener(listener);
+        audioActionlisteners.put(precButton, listener);
+        audioActionlisteners.put(nextButton, listener);
+
         frameBar.setSize(1250, 28);
         frameBar.setPreferredSize(new Dimension(1250, 28));
         rootPanel.setSize(1250, 600);
         rootPanel.setPreferredSize(new Dimension(1250, 600));
         audioBar.setSize(1250, 75);
         audioBar.setPreferredSize(new Dimension(1250, 75));
-        //System.out.println(frameBar.getWidth() + " -- " + frameBar.getWidth());
         
         jButton1.setLocation(1088, 2);
         jButton2.setLocation(1088 + 84, 2);
-        //System.out.println(jButton1.getLocation().x + " " + jButton1.getLocation().y);
     }
 
     private void centerButtonMouseEntered(java.awt.event.MouseEvent evt) {
@@ -345,12 +380,21 @@ public class RootPage extends JFrame {
         stopButton.setIcon(stopImg);
     }
 
+    private void jButton3MouseEntered(java.awt.event.MouseEvent evt) {
+        jButton3.setIcon(backImgHover);
+    }
+
+    private void jButton3MouseExited(java.awt.event.MouseEvent evt) {
+        jButton3.setIcon(backImg);
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel audioBar;
     private javax.swing.JButton centerButton;
     private javax.swing.JPanel frameBar;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel leftTimeLabel;
     private javax.swing.JButton nextButton;
@@ -384,6 +428,10 @@ public class RootPage extends JFrame {
 
     public boolean isAudioPaused() {
         return isAudioPaused;
+    }
+
+    public JButton getBackButton() {
+        return jButton3;
     }
 
     public void setAudioPaused(boolean audioPaused) {

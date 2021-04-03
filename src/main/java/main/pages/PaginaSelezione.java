@@ -17,18 +17,25 @@ import java.util.ArrayList;
  *
  * @author raffo
  */
-public class PaginaSelezioneSala extends Page {
+public class PaginaSelezione extends Page {
+
+    private int id;
+    private String typeOfSelection;
     private ArrayList<TemplateElementoDx> templatesDx;
     private ArrayList<TemplateElementoSx> templatesSx;
     private int width;
     private int height;
     
     /**
-     * Creates new form PaginaSelezioneSala
+     * Creates new form PaginaSelezione
      */
-    public PaginaSelezioneSala() {
+    public PaginaSelezione(AudioManager audioManager, PageManager pageManager, String typeOfSelection, int id) {
         super("SelectionRooms");
+        this.id = id;
+
+        //TODO: fare initpage della pagina selezione, dividendo in casi: room, case e find
         templatesDx = new ArrayList<>();
+        this.typeOfSelection = typeOfSelection;
         templatesDx.add(new TemplateElementoDx("Sala Paleozoica"));
         templatesDx.add(new TemplateElementoDx("Sala Cenozoica"));
         templatesDx.add(new TemplateElementoDx("Sala Mesozoica"));
@@ -53,6 +60,7 @@ public class PaginaSelezioneSala extends Page {
                 this.add(templatesSx.get(i/2));
             }
         }
+
         initComponents();
     }
     

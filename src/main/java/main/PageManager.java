@@ -2,13 +2,15 @@ package main;
 
 import main.audio.AudioManager;
 import main.database.DataManager;
+import main.events.ActionEventManager;
 import main.pages.Page;
 import main.pages.RootPage;
 
 public class PageManager {
 
     private final DataManager dataManager;
-    private final RootPage rootPage; // cambiare poi in rootpage una volta finita in NetBeans
+    private ActionEventManager backButtonListener;
+    private final RootPage rootPage;
 
     public PageManager(AudioManager audioManager) {
         dataManager = new DataManager("localhost", "request-script.php");
@@ -18,6 +20,14 @@ public class PageManager {
     public void changePage(Page newPage, AudioManager audioManager) {
         newPage.initPage(audioManager, this, dataManager);
         rootPage.setPage(newPage);
+    }
+
+    public void changeBackButtonAction(int id, String command, AudioManager audioManager) {
+        if(backButtonListener != null)
+            rootPage.getBackButton().removeActionListener(backButtonListener);
+        backButtonListener = new ActionEventManager(audioManager, this, id);
+        rootPage.getBackButton().addActionListener(backButtonListener);
+        rootPage.getBackButton().setActionCommand(command);
     }
 
     //Getter

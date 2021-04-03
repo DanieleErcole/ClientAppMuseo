@@ -4,6 +4,7 @@ package main.pages;
 import main.PageManager;
 import main.audio.AudioManager;
 import main.database.DataManager;
+import main.events.ActionEventManager;
 
 /**
  *
@@ -17,13 +18,12 @@ public class InitialPage extends Page {
     public InitialPage(AudioManager audioManager, PageManager pageManager, String name) {
         super(name);
         initComponents();
-        //this.initPage(audioManager, pageManager);
+        jButton1.setActionCommand("change-selectionRoom");
+        jButton1.addActionListener(new ActionEventManager(audioManager, pageManager, 0));
     }
 
     @Override
-    public void initPage(AudioManager audioManager, PageManager pageManager, DataManager dataManager) {
-
-    }
+    public void initPage(AudioManager audioManager, PageManager pageManager, DataManager dataManager) {}
 
     /**
      * This method is called from within the constructor to initialize the form.

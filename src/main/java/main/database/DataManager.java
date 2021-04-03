@@ -86,19 +86,19 @@ public class DataManager {
             File documentsDirectory = FileSystemView.getFileSystemView().getDefaultDirectory();
             File[] listFiles = documentsDirectory.listFiles();
 
-            File saveDirectory = this.getDirectory(listFiles);
-            if(saveDirectory != null) {
-                File[] saveFiles = saveDirectory.listFiles();
+            File resDirectory = this.getDirectory(listFiles);
+            if(resDirectory != null) {
+                File[] saveFiles = resDirectory.listFiles();
                 for(File file : saveFiles)
                     if(file.getName().equals(fileToInsert.getName()))
                         System.out.println("- File deleted: " + file.delete() + ";");
             } else {
-                saveDirectory = new File(documentsDirectory.getPath() + "/AppMuseoResources");
-                System.out.println("- Directory created: " + saveDirectory.mkdir() + ";");
+                resDirectory = new File(documentsDirectory.getPath() + "/AppMuseoResources");
+                System.out.println("- Directory created: " + resDirectory.mkdir() + ";");
             }
 
-            String pathString = saveDirectory.getPath() + "/" + fileToInsert.getName();
-            FileOutputStream outputStream = new FileOutputStream(saveDirectory.getPath() + "/" + fileToInsert.getName());
+            String pathString = resDirectory.getPath() + "/" + fileToInsert.getName();
+            FileOutputStream outputStream = new FileOutputStream(resDirectory.getPath() + "/" + fileToInsert.getName());
             ObjectOutputStream objectStream = new ObjectOutputStream(outputStream);
             objectStream.writeObject(fileToInsert);
 
