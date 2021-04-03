@@ -33,28 +33,6 @@ public class PaginaInformazioniReperto extends Page {
         super("FindInfo");
         initComponents();
         this.codice = codice;
-
-        /*reperto = new Reperto("Dino Saurino", "a", "b", 1990, "");
-        JPanel viewport = new JPanel(null);
-        viewport.setBackground(new Color(20, 20, 20));
-        viewport.setPreferredSize(new Dimension(228, reperto.getUrlAudioguide().size() * 62));
-        for(int i = 0; i < reperto.getUrlAudioguide().size(); i++) {
-            TemplateAudioguida template = new TemplateAudioguida(i, audioManager, pageManager);
-            template.setLocation(0, i * 62);
-            template.setSize(228, 62);
-            viewport.add(template);
-        }
-        contenitoreAudioguide.setViewportView(viewport);
-
-        JScrollBar scrollBar = new JScrollBar(JScrollBar.VERTICAL) {
-            public boolean isVisible(){
-                return true;
-            }
-        };
-        contenitoreAudioguide.setVerticalScrollBar(scrollBar);
-        contenitoreAudioguide.getVerticalScrollBar().setUnitIncrement(25);
-        contenitoreAudioguide.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
-        contenitoreDescrizione.setBorder(null);*/
     }
 
     @Override
@@ -63,6 +41,7 @@ public class PaginaInformazioniReperto extends Page {
         params.put("type", "reperto");
         params.put("codice", "" + codice);
 
+        //TODO:prendere anche le specie ecc
         try {
             reperto = dataManager.requestData(Reperto.class, params);
         } catch (IOException e) {
