@@ -28,14 +28,10 @@ public class Visualizzatore3D extends Canvas3D {
         this.setSize(width, height);
         scene = createSceneGraph(0);
         universe = new SimpleUniverse(this);
-        // This will move the ViewPlatform back a bit so the
-        // objects in the scene can be viewed.
-        //u.getViewingPlatform().setNominalViewingTransform();
         universe.addBranchGraph(scene);
     }
 
     public BranchGroup createSceneGraph(int i) {
-        // Create the root of the branch graph
         BranchGroup objRoot = new BranchGroup();
         try{
             Transform3D myTransform3D = new Transform3D();
@@ -59,21 +55,21 @@ public class Visualizzatore3D extends Canvas3D {
             Transform3D myTrans = new Transform3D();
             myTrans.setTranslation(new Vector3f(eyeOffset, -eyeOffset, 0F));
             TransformGroup mytg = new TransformGroup(myTrans);
-            //mytg.addChild(s.getSceneGroup());
+
             tg.addChild(mytg);
             Hashtable table = s.getNamedObjects();
             for(Enumeration e = table.keys(); e.hasMoreElements() ;) {
                 Object key = e.nextElement();
                 Object obj = table.get(key);
                 Shape3D shape = (Shape3D)obj;
-                //shape.setCapability(Shape3D.ALLOW_APPEARANCE_WRITE);
+
                 Appearance ap = new Appearance();
                 Color3f black = new Color3f(0.0f, 0.0f, 0.0f);
                 Color3f green = new Color3f(.5f, .5f, .5f);
-                //Material material = new Material(col, black, col, specular, 64);
+
                 ap.setMaterial(new Material(green,black, green, black, 1.0f));
                 ap.setRenderingAttributes(new RenderingAttributes());
-                // bg.addChild(ap);
+
                 shape.setAppearance(ap);
                 mytg.addChild(new Shape3D(shape.getGeometry(),ap));
             }
@@ -86,7 +82,7 @@ public class Visualizzatore3D extends Canvas3D {
                     = new DirectionalLight(light1Color, light1Direction);
             light1.setInfluencingBounds(bounds);
             objTrans.addChild(light1);
-            // Set up the ambient light
+
             Color3f ambientColor = new Color3f(.6f, .6f, 0.6f);
             AmbientLight ambientLightNode = new AmbientLight(ambientColor);
             ambientLightNode.setInfluencingBounds(bounds);
@@ -95,7 +91,7 @@ public class Visualizzatore3D extends Canvas3D {
             MouseRotate behavior = new MouseRotate();
             behavior.setTransformGroup(tg);
             objTrans.addChild(behavior);
-            // Create the translate behavior node
+
             MouseTranslate behavior3 = new MouseTranslate();
             behavior3.setTransformGroup(tg);
             objTrans.addChild(behavior3);
