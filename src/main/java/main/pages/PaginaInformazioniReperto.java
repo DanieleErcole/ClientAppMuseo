@@ -75,14 +75,28 @@ public class PaginaInformazioniReperto extends Page {
             return;
         }
 
+        ArrayList<String> languages = new ArrayList<>();
+        languages.add("italiano");
+        languages.add("inglese");
+        languages.add("spagnolo");
+        languages.add("tedesco");
+        languages.add("francese");
+        languages.add("portoghese");
+        languages.add("cinese");
+        languages.add("giapponese");
+        languages.add("russo");
+        languages.add("coreano");
+        HashMap<String, String> bandiere = this.getBandiere(languages);
+
         //Parte file audio
-        this.getAudioFiles(dataManager);
+        this.getAudioFiles(dataManager, languages);
         audioManager.setFind(reperto);
         JPanel viewport = new JPanel(null);
         viewport.setBackground(new Color(20, 20, 20));
         viewport.setPreferredSize(new Dimension(228, reperto.getUrlAudioguide().size() * 62));
         for(int i = 0; i < reperto.getUrlAudioguide().size(); i++) {
-            TemplateAudioguida template = new TemplateAudioguida(i, audioManager, pageManager);
+            TemplateAudioguida template = new TemplateAudioguida(i, audioManager, pageManager, new ImageIcon(getClass().getResource(
+                    "/" + bandiere.get(languages.get(i)))).getImage().getScaledInstance(42, 31, Image.SCALE_SMOOTH));
             template.setLocation(0, i * 62);
             template.setSize(228, 62);
             viewport.add(template);
@@ -96,6 +110,8 @@ public class PaginaInformazioniReperto extends Page {
                     canvasReperto3D.getWidth(),
                     canvasReperto3D.getHeight())
             );
+            canvasReperto3D.repaint();
+            canvasReperto3D.revalidate();
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
@@ -113,19 +129,7 @@ public class PaginaInformazioniReperto extends Page {
         descrizioneReperto.setText(reperto.getDescrizione());
     }
 
-    private void getAudioFiles(DataManager dataManager) {
-        ArrayList<String> languages = new ArrayList<>();
-        languages.add("italiano");
-        languages.add("inglese");
-        languages.add("spagnolo");
-        languages.add("tedesco");
-        languages.add("francese");
-        languages.add("portoghese");
-        languages.add("cinese");
-        languages.add("giapponese");
-        languages.add("russo");
-        languages.add("coreano");
-
+    private void getAudioFiles(DataManager dataManager, ArrayList<String> languages) {
         HashMap<String, String> params;
         for(String lang : languages) {
             params = new HashMap<>();
@@ -138,6 +142,13 @@ public class PaginaInformazioniReperto extends Page {
                 break;
             }
         }
+    }
+
+    private HashMap<String, String> getBandiere(ArrayList<String> languages) {
+        HashMap<String, String> bandiere = new HashMap<>();
+        for(String lang : languages)
+            bandiere.put(lang, lang + ".png");
+        return bandiere;
     }
 
     /**

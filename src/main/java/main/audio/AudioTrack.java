@@ -3,6 +3,7 @@ package main.audio;
 import javax.sound.sampled.*;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Timestamp;
 
 public class AudioTrack {
 
@@ -13,24 +14,23 @@ public class AudioTrack {
 
     private float volume;
     private int currentFrame;
-    private final boolean isLooped;
+    private Timestamp duration;
 
     /**
      * Costruttore degli oggetti di classe AudioTrack
      * @param thisClip -> clip audio da riprodurre
      * @param thisStream -> stream audio che riproduce la traccia
      * @param volume -> livello di volume
-     * @param isLooped -> flag che indica se la traccia deve essere riprodotta in loop
      */
-    public AudioTrack(Clip thisClip, AudioInputStream thisStream, float volume, boolean isLooped, URL url, int index) {
+    public AudioTrack(Clip thisClip, AudioInputStream thisStream, float volume, URL url, int index) {
         this.thisClip = thisClip;
         this.thisStream = thisStream;
         this.volume = volume;
-        this.isLooped = isLooped;
         this.clipURL = url;
         this.index = index;
         try {
             this.thisClip.open(thisStream);
+            this.duration = new Timestamp(thisClip.getMicrosecondLength() / 1000);
             //Volume
             FloatControl gainControl = (FloatControl) this.thisClip.getControl(FloatControl.Type.MASTER_GAIN);
             gainControl.setValue(20f * (float) Math.log10(this.volume));
@@ -41,11 +41,8 @@ public class AudioTrack {
     }
 
     public void start() {
-        if(thisStream != null) {
-            if(isLooped)
-                thisClip.loop(Clip.LOOP_CONTINUOUSLY);
+        if(thisStream != null)
             thisClip.start();
-        }
     }
 
     public void pause() {
@@ -59,8 +56,6 @@ public class AudioTrack {
             try {
                 thisStream = AudioSystem.getAudioInputStream(clipURL);
                 thisClip.open(thisStream);
-                if(isLooped)
-                    thisClip.loop(Clip.LOOP_CONTINUOUSLY);
             } catch (LineUnavailableException | UnsupportedAudioFileException | IOException e) {
                 e.printStackTrace();
             }
@@ -86,12 +81,16 @@ public class AudioTrack {
         return volume;
     }
 
+    public Timestamp getDuration() {
+        return duration;
+    }
+
     public Clip getThisClip() {
         return thisClip;
     }
 
-    public boolean isLooped() {
-        return isLooped;
+    public URL getClipURL() {
+        return clipURL;
     }
 
     public int getCurrentFrame() {

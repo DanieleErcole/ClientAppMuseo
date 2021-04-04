@@ -19,7 +19,7 @@ public class Visualizzatore3D extends Canvas3D {
     private final URL currentModel;
     private SimpleUniverse universe;
     private BranchGroup scene;
-    private float eyeOffset;
+    private final float eyeOffset;
 
     public Visualizzatore3D(URL currentModel, int width, int height) {
         super(SimpleUniverse.getPreferredConfiguration());
@@ -50,6 +50,11 @@ public class Visualizzatore3D extends Canvas3D {
             ObjectFile f = new ObjectFile();
             f.setFlags(ObjectFile.RESIZE | ObjectFile.TRIANGULATE | ObjectFile.STRIPIFY);
 
+            Background background = new Background(new Color3f(.1f,.1f,.1f));
+            BoundingSphere sphere = new BoundingSphere(new Point3d(0,0,0), 100000);
+            background.setApplicationBounds(sphere);
+            tg.addChild(background);
+
             Scene s = f.load(currentModel);
             Transform3D myTrans = new Transform3D();
             myTrans.setTranslation(new Vector3f(eyeOffset, -eyeOffset, 0F));
@@ -60,14 +65,14 @@ public class Visualizzatore3D extends Canvas3D {
             for(Enumeration e = table.keys(); e.hasMoreElements() ;) {
                 Object key = e.nextElement();
                 Object obj = table.get(key);
-                Shape3D shape  = (Shape3D)obj;
+                Shape3D shape = (Shape3D)obj;
                 //shape.setCapability(Shape3D.ALLOW_APPEARANCE_WRITE);
                 Appearance ap = new Appearance();
                 Color3f black = new Color3f(0.0f, 0.0f, 0.0f);
-                Color3f red = new Color3f(0.7f, .0f, .15f);
-                Color3f green = new Color3f(0f, .7f, .15f);
+                Color3f green = new Color3f(.5f, .5f, .5f);
+                //Material material = new Material(col, black, col, specular, 64);
                 ap.setMaterial(new Material(green,black, green, black, 1.0f));
-                ap.setRenderingAttributes( new RenderingAttributes() );
+                ap.setRenderingAttributes(new RenderingAttributes());
                 // bg.addChild(ap);
                 shape.setAppearance(ap);
                 mytg.addChild(new Shape3D(shape.getGeometry(),ap));
@@ -82,7 +87,7 @@ public class Visualizzatore3D extends Canvas3D {
             light1.setInfluencingBounds(bounds);
             objTrans.addChild(light1);
             // Set up the ambient light
-            Color3f ambientColor = new Color3f(1.0f, .4f, 0.3f);
+            Color3f ambientColor = new Color3f(.6f, .6f, 0.6f);
             AmbientLight ambientLightNode = new AmbientLight(ambientColor);
             ambientLightNode.setInfluencingBounds(bounds);
             objTrans.addChild(ambientLightNode);

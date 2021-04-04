@@ -33,12 +33,11 @@ public class AudioManager {
     /**
      * Metodo che fa partire la clip audio con il nome dato
      * @param path -> nome della clip audio
-     * @param isLooped -> flag che identifica se l'audio deve essere riprodotto in loop
      */
-    public void addTrack(URL path, boolean isLooped, int index) {
+    public void addTrack(URL path, int index) {
         try {
             DataLine.Info dataInfo = new DataLine.Info(Clip.class, null);
-            currentTrack = new AudioTrack((Clip) mixer.getLine(dataInfo), AudioSystem.getAudioInputStream(path),.02f, isLooped, path, index);
+            currentTrack = new AudioTrack((Clip) mixer.getLine(dataInfo), AudioSystem.getAudioInputStream(path),.02f, path, index);
         } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
             e.printStackTrace();
             return;

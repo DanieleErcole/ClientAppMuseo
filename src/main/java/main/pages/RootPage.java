@@ -52,11 +52,10 @@ public class RootPage extends JFrame {
         pauseImgHover = new ImageIcon(new ImageIcon(getClass().getResource("/pauseBtnImgHover.png")).getImage().getScaledInstance(38, 38, Image.SCALE_SMOOTH));
         stopImgHover = new ImageIcon(new ImageIcon(getClass().getResource("/stopBtnImgHover.png")).getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH));
         backImgHover = new ImageIcon(new ImageIcon(getClass().getResource("/backBtnImgHover.png")).getImage().getScaledInstance(18, 18, Image.SCALE_SMOOTH));
-        
-        //this.setMinimumSize(windowDimension);
+
         initComponents();
         rootPanel.getVerticalScrollBar().setUnitIncrement(25);
-        centerButton.setIcon(playImg);
+        centerButton.setIcon(pauseImg);
         precButton.setIcon(precImg);
         nextButton.setIcon(nextImg);
         stopButton.setIcon(stopImg);
