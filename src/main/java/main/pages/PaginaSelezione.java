@@ -1,17 +1,14 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package main.pages;
 
 import main.PageManager;
 import main.audio.AudioManager;
 import main.database.DataManager;
 
-import java.awt.Color;
 import java.awt.Dimension;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  *
@@ -32,17 +29,26 @@ public class PaginaSelezione extends Page {
     public PaginaSelezione(AudioManager audioManager, PageManager pageManager, String typeOfSelection, int id) {
         super("SelectionRooms");
         this.id = id;
-
-        //TODO: fare initpage della pagina selezione, dividendo in casi: room, case e find
-        templatesDx = new ArrayList<>();
         this.typeOfSelection = typeOfSelection;
-        templatesDx.add(new TemplateElementoDx("Sala Paleozoica"));
-        templatesDx.add(new TemplateElementoDx("Sala Cenozoica"));
-        templatesDx.add(new TemplateElementoDx("Sala Mesozoica"));
+        initComponents();
+    }
+
+    @Override
+    public void initPage(AudioManager audioManager, PageManager pageManager, DataManager dataManager) {
+        templatesDx = new ArrayList<>();
         templatesSx = new ArrayList<>();
-        templatesSx.add(new TemplateElementoSx("Sala Neoarcheana"));
-        templatesSx.add(new TemplateElementoSx("Sala Paleoprotozoica"));
-        templatesSx.add(new TemplateElementoSx("Sala Mesoprotozoica"));
+        switch(typeOfSelection) {
+            case "room":
+                this.initRooms(audioManager, pageManager, dataManager);
+                break;
+            case "find":
+                this.initFinds(audioManager, pageManager, dataManager);
+                break;
+            case "case":
+                this.initCases(audioManager, pageManager, dataManager);
+                break;
+        }
+
         width = 1250;
         height = 253 * (templatesDx.size() + templatesSx.size());
         setPreferredSize(new Dimension(width, height));
@@ -60,21 +66,80 @@ public class PaginaSelezione extends Page {
                 this.add(templatesSx.get(i/2));
             }
         }
-
-        initComponents();
-    }
-    
-    public int getWidth(){
-        return width;
-    }
-    
-    public int getHeight(){
-        return height;
     }
 
-    @Override
-    public void initPage(AudioManager audioManager, PageManager pageManager, DataManager dataManager) {
+    private void initRooms(AudioManager audioManager, PageManager pageManager, DataManager dataManager) {
+        HashMap<String, String> params = new HashMap<>();
+        params.put("type", "sale-amount");
+        Integer[] rooms;
+        try {
+            rooms = dataManager.requestData(Integer[].class, params);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
 
+        for(int i = 0; i < rooms.length; i++) {
+            if(i % 2 == 0) {
+                TemplateElementoDx t = new TemplateElementoDx("room", rooms[i], id);
+                t.initPage(audioManager, pageManager, dataManager);
+                templatesDx.add(t);
+            } else {
+                TemplateElementoSx t = new TemplateElementoSx("room", rooms[i], id);
+                t.initPage(audioManager, pageManager, dataManager);
+                templatesSx.add(t);
+            }
+        }
+    }
+
+    private void initCases(AudioManager audioManager, PageManager pageManager, DataManager dataManager) {
+        HashMap<String, String> params = new HashMap<>();
+        params.put("type", "teche-amount");
+        params.put("codice", "" + id);
+        Integer[] cases;
+        try {
+            cases = dataManager.requestData(Integer[].class, params);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        for(int i = 0; i < cases.length; i++) {
+            if(i % 2 == 0) {
+                TemplateElementoDx t = new TemplateElementoDx("case", cases[i], id);
+                t.initPage(audioManager, pageManager, dataManager);
+                templatesDx.add(t);
+            } else {
+                TemplateElementoSx t = new TemplateElementoSx("case", cases[i], id);
+                t.initPage(audioManager, pageManager, dataManager);
+                templatesSx.add(t);
+            }
+        }
+    }
+
+    private void initFinds(AudioManager audioManager, PageManager pageManager, DataManager dataManager) {
+        HashMap<String, String>params = new HashMap<>();
+        params.put("type", "reperti-amount");
+        params.put("codice", "" + id);
+        Integer[] finds;
+        try {
+            finds = dataManager.requestData(Integer[].class, params);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        for(int i = 0; i < finds.length; i++) {
+            if(i % 2 == 0) {
+                TemplateElementoDx t = new TemplateElementoDx("find", finds[i], id);
+                t.initPage(audioManager, pageManager, dataManager);
+                templatesDx.add(t);
+            } else {
+                TemplateElementoSx t = new TemplateElementoSx("find", finds[i], id);
+                t.initPage(audioManager, pageManager, dataManager);
+                templatesSx.add(t);
+            }
+        }
     }
 
     /**
@@ -99,7 +164,14 @@ public class PaginaSelezione extends Page {
             .addGap(0, 600, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
-    
+
+    public int getWidth(){
+        return width;
+    }
+
+    public int getHeight(){
+        return height;
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables

@@ -55,6 +55,7 @@ public class RootPage extends JFrame {
         
         //this.setMinimumSize(windowDimension);
         initComponents();
+        rootPanel.getVerticalScrollBar().setUnitIncrement(25);
         centerButton.setIcon(playImg);
         precButton.setIcon(precImg);
         nextButton.setIcon(nextImg);
@@ -339,9 +340,6 @@ public class RootPage extends JFrame {
         rootPanel.setPreferredSize(new Dimension(1250, 600));
         audioBar.setSize(1250, 75);
         audioBar.setPreferredSize(new Dimension(1250, 75));
-        
-        jButton1.setLocation(1088, 2);
-        jButton2.setLocation(1088 + 84, 2);
     }
 
     private void centerButtonMouseEntered(java.awt.event.MouseEvent evt) {

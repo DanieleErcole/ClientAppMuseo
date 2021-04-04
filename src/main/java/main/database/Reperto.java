@@ -1,11 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package main.database;
 
-import javax.swing.*;
+import java.net.URL;
 import java.util.ArrayList;
 
 /**
@@ -14,42 +10,32 @@ import java.util.ArrayList;
  */
 public class Reperto {
 
-    private Specie specie;
-    private String nome;
+    private int specie;
+    private int codice;
     private String descrizione;
     private String luogoRitrovamento;
     private int annoRitrovamento;
-    private String urlLocaleMeshPoligonale;
-    private String urlFoto;
-    private ArrayList<String> urlAudioguide;
+    private String mesh3DURL;
+    private String fotoURL;
+    private int teca;
+    private final ArrayList<URL> urlAudioguide;
     
-    public Reperto(String nome, String descrizione, String luogoRitrovamento, int annoRitrovamento, String urlFoto){
+    /*public Reperto(int codice, String nome, String descrizione, String luogoRitrovamento, int annoRitrovamento, String urlFoto) {
+        this.codice = codice;
         this.nome = nome;
         this.descrizione = descrizione;
         this.luogoRitrovamento = luogoRitrovamento;
         this.annoRitrovamento = annoRitrovamento;
         this.urlFoto = urlFoto;
         urlAudioguide = new ArrayList<>();
+    }*/
+
+    public Reperto() {
+        urlAudioguide = new ArrayList<>();
     }
-    
-    public void inserisciUrlLocaleMeshPoligonale(String url){
-        this.urlLocaleMeshPoligonale = url;
-    }
-    
-    public void inserisciSpecie(Specie specie){
-        this.specie = specie;
-    }
-    
-    public ArrayList<String> getUrlAudioguide(){
+
+    public ArrayList<URL> getUrlAudioguide(){
         return urlAudioguide;
-    }
-
-    public Specie getSpecie() {
-        return specie;
-    }
-
-    public String getNome() {
-        return nome;
     }
 
     public String getDescrizione() {
@@ -64,17 +50,24 @@ public class Reperto {
         return annoRitrovamento;
     }
 
-    public String getUrlLocaleMeshPoligonale() {
-        return urlLocaleMeshPoligonale;
+    public int getSpecie() {
+        return specie;
     }
 
     public String getUrlFoto() {
-        return urlFoto;
+        return fotoURL;
     }
 
-    //Setter
-    public void setUrlLocaleMeshPoligonale(String urlLocaleMeshPoligonale) {
-        this.urlLocaleMeshPoligonale = urlLocaleMeshPoligonale;
+    public int getCodice() {
+        return codice;
+    }
+
+    public String getMesh3DURL() {
+        return mesh3DURL;
+    }
+
+    public String getFotoURL() {
+        return fotoURL;
     }
 
 }

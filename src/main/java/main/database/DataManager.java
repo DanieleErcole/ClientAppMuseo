@@ -1,12 +1,15 @@
 package main.database;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.introspect.VisibilityChecker;
 
 import javax.imageio.ImageIO;
-import javax.swing.filechooser.FileSystemView;
 import java.awt.*;
 import java.io.*;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -14,7 +17,7 @@ import java.util.Map;
 public class DataManager {
 
     private final String hostname;
-    private String url; //request-script.php
+    private String url;
     private HttpURLConnection httpConnection;
 
     public DataManager(String hostname, String url) {
@@ -23,9 +26,14 @@ public class DataManager {
     }
 
     public <T> T requestData(Class<T> dataClass, HashMap<String, String> params) throws IOException {
-        StringBuilder requestUrl = new StringBuilder("http://" + hostname + ":80/!User-files/TestAppMuseo/" + url + "?");
-        for(Map.Entry e : params.entrySet())
+        StringBuilder requestUrl = new StringBuilder("http://" + hostname + ":80/TestAppMuseo/" + url + "?");
+        for(Map.Entry e : params.entrySet()) {
             requestUrl.append(e.getKey()).append("=").append(e.getValue());
+            if(params.entrySet().size() > 1)
+                requestUrl.append("&");
+        }
+        //if(params.entrySet().size() > 1)
+            //requestUrl.deleteCharAt(params.entrySet().size() - 1);
 
         InputStream stream;
         httpConnection = (HttpURLConnection) new URL(requestUrl.toString()).openConnection();
@@ -33,17 +41,17 @@ public class DataManager {
         stream = httpConnection.getInputStream();
 
         ObjectMapper mapper = new ObjectMapper();
+        mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+        mapper.setVisibility(VisibilityChecker.Std.defaultInstance().withFieldVisibility(JsonAutoDetect.Visibility.ANY));
+
         T object = mapper.readValue(stream, dataClass);
         stream.close();
         httpConnection.disconnect();
         return object;
     }
 
-    public Image requestImage(String url, HashMap<String, String> params) throws IOException {
-        StringBuilder requestUrl = new StringBuilder("http://" + hostname + ":80/TestAppMuseo/Risorse/Immagini/" + url + "?");
-        for(Map.Entry e : params.entrySet())
-            requestUrl.append(e.getKey()).append("=").append(e.getValue());
-
+    public Image requestImage(String url) throws IOException {
+        StringBuilder requestUrl = new StringBuilder("http://" + hostname + ":80/TestAppMuseo/Risorse/Immagini/" + url);
         InputStream stream;
         httpConnection = (HttpURLConnection) new URL(requestUrl.toString()).openConnection();
         stream = httpConnection.getInputStream();
@@ -54,75 +62,9 @@ public class DataManager {
         return img;
     }
 
-    public File requestFile(String url, HashMap<String, String> params, String filename) throws IOException {
-        StringBuilder requestUrl = new StringBuilder("http://" + hostname + ":80/TestAppMuseo/" + url + "?");
-        for(Map.Entry e : params.entrySet())
-            requestUrl.append(e.getKey()).append("=").append(e.getValue());
-
-        InputStream stream;
-        httpConnection = (HttpURLConnection) new URL(requestUrl.toString()).openConnection();
-        stream = httpConnection.getInputStream();
-
-        File file = null;
-
-        int length = httpConnection.getContentLength();
-        if(length > 0) {
-            byte serverData[] = new byte[length];
-            stream.read(serverData);
-            FileOutputStream outputStream = new FileOutputStream(this.getDirectory(
-                    FileSystemView.getFileSystemView().getDefaultDirectory().listFiles()).getPath() + "/" + filename
-            );
-            outputStream.write(serverData);
-            file = new File(this.getDirectory(
-                    FileSystemView.getFileSystemView().getDefaultDirectory().listFiles()).getPath() + "/" + filename);
-        }
-        stream.close();
-        httpConnection.disconnect();
-        return file;
-    }
-
-    public String insertFile(File fileToInsert) {
-        try {
-            File documentsDirectory = FileSystemView.getFileSystemView().getDefaultDirectory();
-            File[] listFiles = documentsDirectory.listFiles();
-
-            File resDirectory = this.getDirectory(listFiles);
-            if(resDirectory != null) {
-                File[] saveFiles = resDirectory.listFiles();
-                for(File file : saveFiles)
-                    if(file.getName().equals(fileToInsert.getName()))
-                        System.out.println("- File deleted: " + file.delete() + ";");
-            } else {
-                resDirectory = new File(documentsDirectory.getPath() + "/AppMuseoResources");
-                System.out.println("- Directory created: " + resDirectory.mkdir() + ";");
-            }
-
-            String pathString = resDirectory.getPath() + "/" + fileToInsert.getName();
-            FileOutputStream outputStream = new FileOutputStream(resDirectory.getPath() + "/" + fileToInsert.getName());
-            ObjectOutputStream objectStream = new ObjectOutputStream(outputStream);
-            objectStream.writeObject(fileToInsert);
-
-            objectStream.flush();
-            objectStream.close();
-            outputStream.flush();
-            outputStream.close();
-            return pathString;
-        } catch(IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    private File getDirectory(File[] files) {
-        for(File file : files)
-            if(file.getName().equals("AppMuseoResources") && file.isDirectory())
-                return file;
-        return null;
-    }
-
-    //Setter
-    public void setURL(String url) {
-        this.url = url;
+    public URL requestFile(String url, String directory) throws MalformedURLException {
+        StringBuilder requestUrl = new StringBuilder("http://" + hostname + ":80/TestAppMuseo/Risorse/" + directory + "/" + url);
+        return new URL(requestUrl.toString());
     }
 
 }

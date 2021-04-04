@@ -20,9 +20,11 @@ public class AudioTimerListener implements ActionListener {
 
     @Override
     public synchronized void actionPerformed(ActionEvent e) {
-        changeListener.setIgnore(true);
-        rootPage.getTimeSlider().setValue(audioManager.getCurrentTrack().getThisClip().getFramePosition());
-        changeListener.setIgnore(false);
+        if(!rootPage.isAudioPaused()) {
+            changeListener.setIgnore(true);
+            rootPage.getTimeSlider().setValue(audioManager.getCurrentTrack().getThisClip().getFramePosition());
+            changeListener.setIgnore(false);
+        }
     }
 
 }

@@ -1,11 +1,13 @@
 package main;
 
 import com.formdev.flatlaf.FlatDarkLaf;
+import com.sun.j3d.utils.universe.SimpleUniverse;
 import main.audio.AudioManager;
 import main.events.AudioSliderListener;
 import main.events.MouseSliderListener;
 import main.pages.*;
 
+import javax.media.j3d.Canvas3D;
 import javax.swing.*;
 import java.awt.*;
 
@@ -34,6 +36,8 @@ public class MainApp {
         pageManager.getRootPage().showAudioBar(audioManager, pageManager);
         pageManager.getRootPage().getTimeSlider().setMaximum(audioManager.getCurrentTrack().getThisClip().getFrameLength());
         audioManager.startTrack();*/
+
+        Canvas3D canvas3D = new Canvas3D(SimpleUniverse.getPreferredConfiguration());
 
         LoginPage page = new LoginPage(audioManager, pageManager, "login");
         pageManager.getRootPage().getContentPane().setSize(800, 600);

@@ -14,13 +14,15 @@ public class MouseEventManager extends MouseAdapter {
     private final AudioManager audioManager;
     private final PageManager pageManager;
     private final String typeSelection;
+    private final int backCodice;
     private int id;
 
-    public MouseEventManager(AudioManager audioManager, PageManager pageManager, int id, String typeSelection) {
+    public MouseEventManager(AudioManager audioManager, PageManager pageManager, int id, String typeSelection, int backCodice) {
         this.audioManager = audioManager;
         this.pageManager = pageManager;
         this.typeSelection = typeSelection;
         this.id = id;
+        this.backCodice = backCodice;
     }
 
     @Override
@@ -28,16 +30,16 @@ public class MouseEventManager extends MouseAdapter {
         Page page = null;
 
         if(typeSelection.equals("room")) {
-            pageManager.changeBackButtonAction(id, "change-initial", audioManager);
+            pageManager.changeBackButtonAction(backCodice, "change-initial", audioManager);
             page = new PaginaSelezione(audioManager, pageManager, "room", id);
         } else if(typeSelection.equals("case")) {
-            pageManager.changeBackButtonAction(id, "change-selectionRoom", audioManager);
+            pageManager.changeBackButtonAction(backCodice, "change-selectionRoom", audioManager);
             page = new PaginaSelezione(audioManager, pageManager, "case", id);
         } else if(typeSelection.equals("find")) {
-            pageManager.changeBackButtonAction(id, "change-selectionCase", audioManager);
+            pageManager.changeBackButtonAction(backCodice, "change-selectionCase", audioManager);
             page = new PaginaSelezione(audioManager, pageManager, "find", id);
         } else if(typeSelection.equals("selectFind")) {
-            pageManager.changeBackButtonAction(id, "change-selectionFind", audioManager);
+            pageManager.changeBackButtonAction(backCodice, "change-selectionFind", audioManager);
             page = new PaginaInformazioniReperto(audioManager, pageManager, id);
         }
 

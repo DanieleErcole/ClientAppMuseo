@@ -20,7 +20,7 @@ public class Specie {
     private String regno;
     private int probabilità;
     
-    public Specie(String nome, String genere, String famiglia, String ordine, String classe, String phylum, String regno, int probabilità){
+    /*public Specie(String nome, String genere, String famiglia, String ordine, String classe, String phylum, String regno, int probabilità){
         this.nome = nome;
         this.genere = genere;
         this.famiglia = famiglia;
@@ -29,7 +29,7 @@ public class Specie {
         this.phylum = this.phylum;
         this.regno = regno;
         this.probabilità = probabilità;
-    }
+    }*/
     
     public String getNome(){
         return nome;

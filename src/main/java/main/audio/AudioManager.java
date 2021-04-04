@@ -46,16 +46,16 @@ public class AudioManager {
         currentTrack.getThisClip().addLineListener(new LineListener() {
             @Override
             public void update(LineEvent event) {
-                if(event.getType().equals(LineEvent.Type.STOP) || event.getType().equals(LineEvent.Type.CLOSE)) {
+                if(event.getType().equals(LineEvent.Type.STOP) || event.getType().equals(LineEvent.Type.CLOSE))
                     audioTimer.stop();
-                }
+                else if(event.getType().equals(LineEvent.Type.START) || event.getType().equals(LineEvent.Type.OPEN))
+                    audioTimer.start();
             }
         });
     }
 
     public void startTrack() {
         currentTrack.start();
-        audioTimer.start();
     }
 
     public void pauseTrack() {
@@ -68,7 +68,7 @@ public class AudioManager {
 
     public void stopTrack() {
         currentTrack.stop();
-        currentTrack = null;;
+        currentTrack = null;
     }
 
     //Getter

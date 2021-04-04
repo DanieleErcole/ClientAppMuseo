@@ -7,9 +7,11 @@ package main.pages;
 
 import main.PageManager;
 import main.audio.AudioManager;
-import main.database.DataManager;
+import main.database.*;
+import main.events.MouseEventManager;
 
-import java.awt.Color;
+import java.io.IOException;
+import java.util.HashMap;
 
 /**
  *
@@ -17,18 +19,133 @@ import java.awt.Color;
  */
 public class TemplateElementoSx extends Page {
 
+    private int codice;
+    private int backCodice;
+    private String typeSelection;
+
     /**
      * Creates new form TemplateElementoDx
      */
-    public TemplateElementoSx(String titolo) {
+    public TemplateElementoSx(String typeSelection, int codice, int backCodice) {
         super("templateElemSx");
         initComponents();
-        titoloElemento.setText(titolo);
+        this.codice = codice;
+        this.typeSelection = typeSelection;
+        this.backCodice = backCodice;
     }
 
     @Override
     public void initPage(AudioManager audioManager, PageManager pageManager, DataManager dataManager) {
+        switch(typeSelection) {
+            case "room":
+                this.initRoom(audioManager, pageManager, dataManager);
+                break;
+            case "find":
+                this.initFind(audioManager, pageManager, dataManager);
+                break;
+            case "case":
+                this.initCase(audioManager, pageManager, dataManager);
+                break;
+        }
+    }
 
+    private void initRoom(AudioManager audioManager, PageManager pageManager, DataManager dataManager) {
+        HashMap<String, String> params = new HashMap<>();
+        params.put("type", "sala");
+        params.put("codice", "" + codice);
+        Room room;
+        try {
+            room = dataManager.requestData(Room.class, params);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        /*Image img = null;
+        try {
+            img = dataManager.requestImage(room.getFotoURL());
+            img = new ImageIcon(img).getImage().getScaledInstance(440, 220, Image.SCALE_SMOOTH);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }*/
+
+        params = new HashMap<>();
+        params.put("type", "periodoStorico");
+        params.put("codice", "" + room.getPeriodoStorico());
+        HistoricalPeriod period;
+        try {
+            period = dataManager.requestData(HistoricalPeriod.class, params);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        this.addMouseListener(new MouseEventManager(audioManager, pageManager, codice, "case", backCodice));
+        titoloElemento.setText("Sala periodo " + period.getNome());
+    }
+
+    private void initCase(AudioManager audioManager, PageManager pageManager, DataManager dataManager) {
+        HashMap<String, String> params = new HashMap<>();
+        params.put("type", "teca");
+        params.put("codice", "" + codice);
+        Teca teca;
+        try {
+            teca = dataManager.requestData(Teca.class, params);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        /*Image img = null;
+        try {
+            img = dataManager.requestImage(room.getFotoURL());
+            img = new ImageIcon(img).getImage().getScaledInstance(440, 220, Image.SCALE_SMOOTH);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }*/
+
+        this.addMouseListener(new MouseEventManager(audioManager, pageManager, codice, "find", backCodice));
+        titoloElemento.setText("Teca " + teca.getCodice());
+        descrizione.setText(teca.getDescrizione());
+    }
+
+    private void initFind(AudioManager audioManager, PageManager pageManager, DataManager dataManager) {
+        HashMap<String, String> params = new HashMap<>();
+        params.put("type", "reperto");
+        params.put("codice", "" + codice);
+        Reperto find;
+        try {
+            find = dataManager.requestData(Reperto.class, params);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        /*Image img = null;
+        try {
+            img = dataManager.requestImage(room.getFotoURL());
+            img = new ImageIcon(img).getImage().getScaledInstance(440, 220, Image.SCALE_SMOOTH);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }*/
+
+        params = new HashMap<>();
+        params.put("type", "specie");
+        params.put("codice", "" + find.getSpecie());
+        Specie specie;
+        try {
+            specie = dataManager.requestData(Specie.class, params);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        this.addMouseListener(new MouseEventManager(audioManager, pageManager, codice, "selectFind", backCodice));
+        titoloElemento.setText(specie.getNome());
+        descrizione.setText(find.getDescrizione());
     }
 
     /**

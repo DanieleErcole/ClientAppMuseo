@@ -9,10 +9,12 @@ import main.PageManager;
 import main.audio.AudioManager;
 import main.database.DataManager;
 import main.database.Reperto;
+import main.database.Specie;
+import main.visualization.Visualizzatore3D;
 
 import java.awt.*;
-import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import javax.swing.*;
@@ -33,6 +35,16 @@ public class PaginaInformazioniReperto extends Page {
         super("FindInfo");
         initComponents();
         this.codice = codice;
+
+        JScrollBar scrollBar = new JScrollBar(JScrollBar.VERTICAL) {
+            public boolean isVisible(){
+                return true;
+            }
+        };
+        contenitoreAudioguide.setVerticalScrollBar(scrollBar);
+        contenitoreAudioguide.getVerticalScrollBar().setUnitIncrement(25);
+        contenitoreAudioguide.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+        contenitoreDescrizione.setBorder(null);
     }
 
     @Override
@@ -41,25 +53,31 @@ public class PaginaInformazioniReperto extends Page {
         params.put("type", "reperto");
         params.put("codice", "" + codice);
 
-        //TODO:prendere anche le specie ecc
+        Specie specie;
         try {
             reperto = dataManager.requestData(Reperto.class, params);
+            params = new HashMap<>();
+            params.put("type", "specie");
+            params.put("codice", "" + reperto.getSpecie());
+            specie = dataManager.requestData(Specie.class, params);
         } catch (IOException e) {
             e.printStackTrace();
             return;
         }
 
-        Image img;
-        params = new HashMap<>();
-        params.put("reperto", "" + codice);
+        //Immagine reperto
+        Image img = null;
         try {
-            img = dataManager.requestImage("req-image.php", params);
+            img = dataManager.requestImage(reperto.getFotoURL());
+            img = new ImageIcon(img).getImage().getScaledInstance(440, 220, Image.SCALE_SMOOTH);
         } catch (IOException e) {
             e.printStackTrace();
             return;
         }
-        this.getAudioFiles(dataManager);
 
+        //Parte file audio
+        this.getAudioFiles(dataManager);
+        audioManager.setFind(reperto);
         JPanel viewport = new JPanel(null);
         viewport.setBackground(new Color(20, 20, 20));
         viewport.setPreferredSize(new Dimension(228, reperto.getUrlAudioguide().size() * 62));
@@ -70,27 +88,29 @@ public class PaginaInformazioniReperto extends Page {
             viewport.add(template);
         }
         contenitoreAudioguide.setViewportView(viewport);
-        JScrollBar scrollBar = new JScrollBar(JScrollBar.VERTICAL) {
-            public boolean isVisible(){
-                return true;
-            }
-        };
-        contenitoreAudioguide.setVerticalScrollBar(scrollBar);
-        contenitoreAudioguide.getVerticalScrollBar().setUnitIncrement(25);
-        contenitoreAudioguide.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
-        contenitoreDescrizione.setBorder(null);
 
+        //Modello 3D e visualizzazione
+        try {
+            canvasReperto3D.add(new Visualizzatore3D(dataManager.requestFile(
+                    reperto.getMesh3DURL(), "Modelli"),
+                    canvasReperto3D.getWidth(),
+                    canvasReperto3D.getHeight())
+            );
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        //Testo
         ritrovamentoReperto.setText(reperto.getLuogoRitrovamento() + ", " + reperto.getAnnoRitrovamento());
-        genereReperto.setText(reperto.getSpecie().getGenere());
-        ordineReperto.setText(reperto.getSpecie().getOrdine());
-        phylumReperto.setText(reperto.getSpecie().getPhylum());
-        specieReperto.setText(reperto.getSpecie().getNome());
-        famigliaReperto.setText(reperto.getSpecie().getFamiglia());
-        classeReperto.setText(reperto.getSpecie().getClasse());
-        regnoReperto.setText(reperto.getSpecie().getRegno());
+        titoloReperto.setText(specie.getNome());
+        genereReperto.setText(specie.getGenere());
+        ordineReperto.setText(specie.getOrdine());
+        phylumReperto.setText(specie.getPhylum());
+        specieReperto.setText(specie.getNome());
+        famigliaReperto.setText(specie.getFamiglia());
+        classeReperto.setText(specie.getClasse());
+        regnoReperto.setText(specie.getRegno());
         descrizioneReperto.setText(reperto.getDescrizione());
-
-        immagine3.setIcon(new ImageIcon(img));
     }
 
     private void getAudioFiles(DataManager dataManager) {
@@ -112,9 +132,7 @@ public class PaginaInformazioniReperto extends Page {
             params.put("lingua", lang);
             params.put("reperto", "" + codice);
             try {
-                File audioFile = dataManager.requestFile("audio-file.php", params, "audio-" + codice + "-" + lang + ".wav");
-                String filePath = dataManager.insertFile(audioFile);
-                reperto.getUrlAudioguide().add(filePath);
+                reperto.getUrlAudioguide().add(dataManager.requestFile(codice + "_" + lang + ".wav", "Audio"));
             } catch (IOException e) {
                 e.printStackTrace();
                 break;
@@ -150,8 +168,6 @@ public class PaginaInformazioniReperto extends Page {
         contenitorePannelloDescrizione = new javax.swing.JPanel();
         contenitoreDescrizione = new javax.swing.JScrollPane();
         descrizioneReperto = new javax.swing.JTextArea();
-        pannelloImmagine3 = new javax.swing.JPanel();
-        immagine3 = new javax.swing.JLabel();
         contenitoreTitolo = new javax.swing.JPanel();
         titoloReperto = new javax.swing.JLabel();
         canvasReperto3D = new javax.swing.JPanel();
@@ -173,19 +189,19 @@ public class PaginaInformazioniReperto extends Page {
         javax.swing.GroupLayout pannelloRitrovamentoLayout = new javax.swing.GroupLayout(pannelloRitrovamento);
         pannelloRitrovamento.setLayout(pannelloRitrovamentoLayout);
         pannelloRitrovamentoLayout.setHorizontalGroup(
-            pannelloRitrovamentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pannelloRitrovamentoLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(ritrovamentoReperto, javax.swing.GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE)
-                .addContainerGap())
+                pannelloRitrovamentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(pannelloRitrovamentoLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(ritrovamentoReperto, javax.swing.GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE)
+                                .addContainerGap())
         );
         pannelloRitrovamentoLayout.setVerticalGroup(
-            pannelloRitrovamentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(ritrovamentoReperto, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                pannelloRitrovamentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(ritrovamentoReperto, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         add(pannelloRitrovamento);
-        pannelloRitrovamento.setBounds(40, 90, 230, 53);
+        pannelloRitrovamento.setBounds(520, 90, 230, 53);
 
         pannelloSpecie.setBackground(new java.awt.Color(50, 50, 50));
         pannelloSpecie.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(50, 50, 50)), "Specie"));
@@ -197,19 +213,19 @@ public class PaginaInformazioniReperto extends Page {
         javax.swing.GroupLayout pannelloSpecieLayout = new javax.swing.GroupLayout(pannelloSpecie);
         pannelloSpecie.setLayout(pannelloSpecieLayout);
         pannelloSpecieLayout.setHorizontalGroup(
-            pannelloSpecieLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pannelloSpecieLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(specieReperto, javax.swing.GroupLayout.DEFAULT_SIZE, 218, Short.MAX_VALUE)
-                .addContainerGap())
+                pannelloSpecieLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(pannelloSpecieLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(specieReperto, javax.swing.GroupLayout.DEFAULT_SIZE, 218, Short.MAX_VALUE)
+                                .addContainerGap())
         );
         pannelloSpecieLayout.setVerticalGroup(
-            pannelloSpecieLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(specieReperto, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
+                pannelloSpecieLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(specieReperto, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
         );
 
         add(pannelloSpecie);
-        pannelloSpecie.setBounds(270, 90, 240, 53);
+        pannelloSpecie.setBounds(750, 90, 240, 53);
 
         pannelloGenere.setBackground(new java.awt.Color(50, 50, 50));
         pannelloGenere.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(50, 50, 50)), "Genere"));
@@ -221,19 +237,19 @@ public class PaginaInformazioniReperto extends Page {
         javax.swing.GroupLayout pannelloGenereLayout = new javax.swing.GroupLayout(pannelloGenere);
         pannelloGenere.setLayout(pannelloGenereLayout);
         pannelloGenereLayout.setHorizontalGroup(
-            pannelloGenereLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pannelloGenereLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(genereReperto, javax.swing.GroupLayout.DEFAULT_SIZE, 208, Short.MAX_VALUE)
-                .addContainerGap())
+                pannelloGenereLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(pannelloGenereLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(genereReperto, javax.swing.GroupLayout.DEFAULT_SIZE, 208, Short.MAX_VALUE)
+                                .addContainerGap())
         );
         pannelloGenereLayout.setVerticalGroup(
-            pannelloGenereLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(genereReperto, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                pannelloGenereLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(genereReperto, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         add(pannelloGenere);
-        pannelloGenere.setBounds(40, 140, 230, 53);
+        pannelloGenere.setBounds(520, 140, 230, 53);
 
         pannelloFamiglia.setBackground(new java.awt.Color(50, 50, 50));
         pannelloFamiglia.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(50, 50, 50)), "Famiglia"));
@@ -245,19 +261,19 @@ public class PaginaInformazioniReperto extends Page {
         javax.swing.GroupLayout pannelloFamigliaLayout = new javax.swing.GroupLayout(pannelloFamiglia);
         pannelloFamiglia.setLayout(pannelloFamigliaLayout);
         pannelloFamigliaLayout.setHorizontalGroup(
-            pannelloFamigliaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pannelloFamigliaLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(famigliaReperto, javax.swing.GroupLayout.DEFAULT_SIZE, 208, Short.MAX_VALUE)
-                .addContainerGap())
+                pannelloFamigliaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(pannelloFamigliaLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(famigliaReperto, javax.swing.GroupLayout.DEFAULT_SIZE, 208, Short.MAX_VALUE)
+                                .addContainerGap())
         );
         pannelloFamigliaLayout.setVerticalGroup(
-            pannelloFamigliaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(famigliaReperto, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                pannelloFamigliaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(famigliaReperto, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         add(pannelloFamiglia);
-        pannelloFamiglia.setBounds(270, 140, 240, 53);
+        pannelloFamiglia.setBounds(750, 140, 240, 53);
 
         pannelloOrdine.setBackground(new java.awt.Color(50, 50, 50));
         pannelloOrdine.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(50, 50, 50)), "Ordine"));
@@ -269,19 +285,19 @@ public class PaginaInformazioniReperto extends Page {
         javax.swing.GroupLayout pannelloOrdineLayout = new javax.swing.GroupLayout(pannelloOrdine);
         pannelloOrdine.setLayout(pannelloOrdineLayout);
         pannelloOrdineLayout.setHorizontalGroup(
-            pannelloOrdineLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pannelloOrdineLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(ordineReperto, javax.swing.GroupLayout.DEFAULT_SIZE, 208, Short.MAX_VALUE)
-                .addContainerGap())
+                pannelloOrdineLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(pannelloOrdineLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(ordineReperto, javax.swing.GroupLayout.DEFAULT_SIZE, 208, Short.MAX_VALUE)
+                                .addContainerGap())
         );
         pannelloOrdineLayout.setVerticalGroup(
-            pannelloOrdineLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(ordineReperto, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                pannelloOrdineLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(ordineReperto, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         add(pannelloOrdine);
-        pannelloOrdine.setBounds(40, 190, 230, 53);
+        pannelloOrdine.setBounds(520, 190, 230, 53);
 
         pannelloClasse.setBackground(new java.awt.Color(50, 50, 50));
         pannelloClasse.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(50, 50, 50)), "Classe"));
@@ -293,19 +309,19 @@ public class PaginaInformazioniReperto extends Page {
         javax.swing.GroupLayout pannelloClasseLayout = new javax.swing.GroupLayout(pannelloClasse);
         pannelloClasse.setLayout(pannelloClasseLayout);
         pannelloClasseLayout.setHorizontalGroup(
-            pannelloClasseLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pannelloClasseLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(classeReperto, javax.swing.GroupLayout.DEFAULT_SIZE, 208, Short.MAX_VALUE)
-                .addContainerGap())
+                pannelloClasseLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(pannelloClasseLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(classeReperto, javax.swing.GroupLayout.DEFAULT_SIZE, 208, Short.MAX_VALUE)
+                                .addContainerGap())
         );
         pannelloClasseLayout.setVerticalGroup(
-            pannelloClasseLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(classeReperto, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                pannelloClasseLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(classeReperto, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         add(pannelloClasse);
-        pannelloClasse.setBounds(270, 190, 240, 53);
+        pannelloClasse.setBounds(750, 190, 240, 53);
 
         pannelloPhylum.setBackground(new java.awt.Color(50, 50, 50));
         pannelloPhylum.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(50, 50, 50)), "Phylum"));
@@ -317,19 +333,19 @@ public class PaginaInformazioniReperto extends Page {
         javax.swing.GroupLayout pannelloPhylumLayout = new javax.swing.GroupLayout(pannelloPhylum);
         pannelloPhylum.setLayout(pannelloPhylumLayout);
         pannelloPhylumLayout.setHorizontalGroup(
-            pannelloPhylumLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pannelloPhylumLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(phylumReperto, javax.swing.GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE)
-                .addContainerGap())
+                pannelloPhylumLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(pannelloPhylumLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(phylumReperto, javax.swing.GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE)
+                                .addContainerGap())
         );
         pannelloPhylumLayout.setVerticalGroup(
-            pannelloPhylumLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(phylumReperto, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                pannelloPhylumLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(phylumReperto, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         add(pannelloPhylum);
-        pannelloPhylum.setBounds(40, 240, 230, 53);
+        pannelloPhylum.setBounds(520, 240, 230, 53);
 
         pannelloRegno.setBackground(new java.awt.Color(50, 50, 50));
         pannelloRegno.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(50, 50, 50)), "Regno"));
@@ -341,19 +357,19 @@ public class PaginaInformazioniReperto extends Page {
         javax.swing.GroupLayout pannelloRegnoLayout = new javax.swing.GroupLayout(pannelloRegno);
         pannelloRegno.setLayout(pannelloRegnoLayout);
         pannelloRegnoLayout.setHorizontalGroup(
-            pannelloRegnoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pannelloRegnoLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(regnoReperto, javax.swing.GroupLayout.DEFAULT_SIZE, 208, Short.MAX_VALUE)
-                .addContainerGap())
+                pannelloRegnoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(pannelloRegnoLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(regnoReperto, javax.swing.GroupLayout.DEFAULT_SIZE, 208, Short.MAX_VALUE)
+                                .addContainerGap())
         );
         pannelloRegnoLayout.setVerticalGroup(
-            pannelloRegnoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(regnoReperto, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                pannelloRegnoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(regnoReperto, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         add(pannelloRegno);
-        pannelloRegno.setBounds(270, 240, 240, 53);
+        pannelloRegno.setBounds(750, 240, 240, 53);
 
         contenitorePannelloDescrizione.setBackground(new java.awt.Color(50, 50, 50));
         contenitorePannelloDescrizione.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(50, 50, 50)), "Descrizione"));
@@ -376,45 +392,22 @@ public class PaginaInformazioniReperto extends Page {
         javax.swing.GroupLayout contenitorePannelloDescrizioneLayout = new javax.swing.GroupLayout(contenitorePannelloDescrizione);
         contenitorePannelloDescrizione.setLayout(contenitorePannelloDescrizioneLayout);
         contenitorePannelloDescrizioneLayout.setHorizontalGroup(
-            contenitorePannelloDescrizioneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, contenitorePannelloDescrizioneLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(contenitoreDescrizione, javax.swing.GroupLayout.DEFAULT_SIZE, 468, Short.MAX_VALUE)
-                .addContainerGap())
+                contenitorePannelloDescrizioneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, contenitorePannelloDescrizioneLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(contenitoreDescrizione, javax.swing.GroupLayout.DEFAULT_SIZE, 448, Short.MAX_VALUE)
+                                .addContainerGap())
         );
         contenitorePannelloDescrizioneLayout.setVerticalGroup(
-            contenitorePannelloDescrizioneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, contenitorePannelloDescrizioneLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(contenitoreDescrizione, javax.swing.GroupLayout.DEFAULT_SIZE, 215, Short.MAX_VALUE)
-                .addContainerGap())
+                contenitorePannelloDescrizioneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, contenitorePannelloDescrizioneLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(contenitoreDescrizione, javax.swing.GroupLayout.DEFAULT_SIZE, 215, Short.MAX_VALUE)
+                                .addContainerGap())
         );
 
         add(contenitorePannelloDescrizione);
-        contenitorePannelloDescrizione.setBounds(30, 320, 490, 250);
-
-        pannelloImmagine3.setBackground(new java.awt.Color(34, 34, 34));
-
-        immagine3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        immagine3.setPreferredSize(new java.awt.Dimension(225, 300));
-
-        javax.swing.GroupLayout pannelloImmagine3Layout = new javax.swing.GroupLayout(pannelloImmagine3);
-        pannelloImmagine3.setLayout(pannelloImmagine3Layout);
-        pannelloImmagine3Layout.setHorizontalGroup(
-            pannelloImmagine3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pannelloImmagine3Layout.createSequentialGroup()
-                .addComponent(immagine3, javax.swing.GroupLayout.PREFERRED_SIZE, 442, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-        );
-        pannelloImmagine3Layout.setVerticalGroup(
-            pannelloImmagine3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pannelloImmagine3Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(immagine3, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
-
-        add(pannelloImmagine3);
-        pannelloImmagine3.setBounds(550, 90, 390, 220);
+        contenitorePannelloDescrizione.setBounds(520, 320, 470, 250);
 
         contenitoreTitolo.setBackground(new java.awt.Color(34, 34, 34));
 
@@ -426,18 +419,18 @@ public class PaginaInformazioniReperto extends Page {
         javax.swing.GroupLayout contenitoreTitoloLayout = new javax.swing.GroupLayout(contenitoreTitolo);
         contenitoreTitolo.setLayout(contenitoreTitoloLayout);
         contenitoreTitoloLayout.setHorizontalGroup(
-            contenitoreTitoloLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, contenitoreTitoloLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(titoloReperto, javax.swing.GroupLayout.DEFAULT_SIZE, 950, Short.MAX_VALUE)
-                .addContainerGap())
+                contenitoreTitoloLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, contenitoreTitoloLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(titoloReperto, javax.swing.GroupLayout.DEFAULT_SIZE, 950, Short.MAX_VALUE)
+                                .addContainerGap())
         );
         contenitoreTitoloLayout.setVerticalGroup(
-            contenitoreTitoloLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(contenitoreTitoloLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(titoloReperto, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
-                .addContainerGap())
+                contenitoreTitoloLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(contenitoreTitoloLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(titoloReperto, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
+                                .addContainerGap())
         );
 
         add(contenitoreTitolo);
@@ -448,16 +441,16 @@ public class PaginaInformazioniReperto extends Page {
         javax.swing.GroupLayout canvasReperto3DLayout = new javax.swing.GroupLayout(canvasReperto3D);
         canvasReperto3D.setLayout(canvasReperto3DLayout);
         canvasReperto3DLayout.setHorizontalGroup(
-            canvasReperto3DLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 440, Short.MAX_VALUE)
+                canvasReperto3DLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 460, Short.MAX_VALUE)
         );
         canvasReperto3DLayout.setVerticalGroup(
-            canvasReperto3DLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 240, Short.MAX_VALUE)
+                canvasReperto3DLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 480, Short.MAX_VALUE)
         );
 
         add(canvasReperto3D);
-        canvasReperto3D.setBounds(550, 330, 440, 240);
+        canvasReperto3D.setBounds(30, 90, 460, 480);
 
         pannelloAudioguide.setBackground(new java.awt.Color(20, 20, 20));
         pannelloAudioguide.setLayout(null);
@@ -474,12 +467,12 @@ public class PaginaInformazioniReperto extends Page {
         javax.swing.GroupLayout separatoreNomeLayout = new javax.swing.GroupLayout(separatoreNome);
         separatoreNome.setLayout(separatoreNomeLayout);
         separatoreNomeLayout.setHorizontalGroup(
-            separatoreNomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 190, Short.MAX_VALUE)
+                separatoreNomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 190, Short.MAX_VALUE)
         );
         separatoreNomeLayout.setVerticalGroup(
-            separatoreNomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 4, Short.MAX_VALUE)
+                separatoreNomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 4, Short.MAX_VALUE)
         );
 
         pannelloAudioguide.add(separatoreNome);
@@ -506,14 +499,12 @@ public class PaginaInformazioniReperto extends Page {
     private javax.swing.JTextArea descrizioneReperto;
     private javax.swing.JLabel famigliaReperto;
     private javax.swing.JLabel genereReperto;
-    private javax.swing.JLabel immagine3;
     private javax.swing.JLabel nomePannello;
     private javax.swing.JLabel ordineReperto;
     private javax.swing.JPanel pannelloAudioguide;
     private javax.swing.JPanel pannelloClasse;
     private javax.swing.JPanel pannelloFamiglia;
     private javax.swing.JPanel pannelloGenere;
-    private javax.swing.JPanel pannelloImmagine3;
     private javax.swing.JPanel pannelloOrdine;
     private javax.swing.JPanel pannelloPhylum;
     private javax.swing.JPanel pannelloRegno;
