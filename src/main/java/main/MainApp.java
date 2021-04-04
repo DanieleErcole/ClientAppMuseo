@@ -30,15 +30,6 @@ public class MainApp {
         pageManager.getRootPage().getTimeSlider().addMouseListener(mouseSliderListener);
         audioManager.initAudioTimer(pageManager.getRootPage(), changeListener);
 
-        //TODO: test audio
-        /*pageManager.getRootPage().setAudioPaused(false);
-        audioManager.addTrack(getClass().getResource("/AudioTest/Hollow Knight - Sealed Vessel - Path of Pain Music.wav"), false, 0);
-        pageManager.getRootPage().showAudioBar(audioManager, pageManager);
-        pageManager.getRootPage().getTimeSlider().setMaximum(audioManager.getCurrentTrack().getThisClip().getFrameLength());
-        audioManager.startTrack();*/
-
-        Canvas3D canvas3D = new Canvas3D(SimpleUniverse.getPreferredConfiguration());
-
         LoginPage page = new LoginPage(audioManager, pageManager, "login");
         pageManager.getRootPage().getContentPane().setSize(800, 600);
         pageManager.getRootPage().getContentPane().setPreferredSize(new Dimension(800, 600));
