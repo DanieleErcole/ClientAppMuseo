@@ -30,7 +30,6 @@ public class SliderChangeListener implements ChangeListener {
                 Timer delayed = new Timer(25, new ActionListener() {
                     @Override
                     public synchronized void actionPerformed(ActionEvent e) {
-                        System.out.println("ciao");
                         audioManager.getCurrentTrack().setCurrentFrame(sliderMouseListener.getValueClicked());
                         slider.setValue(sliderMouseListener.getValueClicked());
                         sliderMouseListener.setClicked(false);
