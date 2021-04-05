@@ -4,7 +4,7 @@ package main.pages;
 import main.PageManager;
 import main.audio.AudioManager;
 import main.database.DataManager;
-import main.events.ActionEventManager;
+import main.events.ButtonActionManager;
 
 import java.awt.*;
 import javax.swing.*;
@@ -31,10 +31,10 @@ public class SignUpPage extends Page {
         emailIcon.setIcon(new ImageIcon(new ImageIcon(getClass().getResource("/envelope-solid.png")).getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH)));
         pswIcon.setIcon(new ImageIcon(new ImageIcon(getClass().getResource("/lock-solid.png")).getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH)));
 
-        signupButton.setActionCommand("login");
-        signupButton.addActionListener(new ActionEventManager(audioManager, pageManager, 0));
+        signupButton.setActionCommand("signup");
+        signupButton.addActionListener(new ButtonActionManager(audioManager, pageManager, 0));
         fPswButton.setActionCommand("change-login");
-        fPswButton.addActionListener(new ActionEventManager(audioManager, pageManager, 0));
+        fPswButton.addActionListener(new ButtonActionManager(audioManager, pageManager, 0));
 
         pageManager.getRootPage().getBackButton().setSize(pageManager.getRootPage().getBackButton().getWidth(), 0);
         pageManager.getRootPage().getBackButton().setPreferredSize(new Dimension(pageManager.getRootPage().getBackButton().getWidth(), 0));
@@ -69,14 +69,14 @@ public class SignUpPage extends Page {
 
         setPreferredSize(new java.awt.Dimension(800, 600));
 
-        jPanel3.setBackground(new java.awt.Color(0, 200, 83));
+        jPanel3.setBackground(new java.awt.Color(199, 190, 169));
         jPanel3.setPreferredSize(new java.awt.Dimension(800, 572));
 
-        jPanel2.setBackground(new java.awt.Color(34, 34, 34));
+        jPanel2.setBackground(new java.awt.Color(50, 44, 48));
 
-        jPanel1.setBackground(new java.awt.Color(34, 34, 34));
+        jPanel1.setBackground(new java.awt.Color(50, 44, 48));
 
-        emailInputField.setBackground(new java.awt.Color(44, 44, 44));
+        emailInputField.setBackground(new java.awt.Color(65, 61, 63));
         emailInputField.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         emailInputField.setForeground(new java.awt.Color(153, 153, 153));
         emailInputField.setText("Email");
@@ -100,9 +100,9 @@ public class SignUpPage extends Page {
         emailIcon.setForeground(new java.awt.Color(204, 204, 204));
         emailIcon.setText("jLabel1");
 
-        signupButton.setBackground(new java.awt.Color(0, 200, 83));
+        signupButton.setBackground(new java.awt.Color(215, 201, 104));
         signupButton.setFont(new java.awt.Font("Bahnschrift", 1, 18)); // NOI18N
-        signupButton.setForeground(new java.awt.Color(255, 255, 255));
+        signupButton.setForeground(new java.awt.Color(73, 73, 73));
         signupButton.setText("Crea account");
         signupButton.setActionCommand("login");
         signupButton.setBorder(null);
@@ -125,11 +125,11 @@ public class SignUpPage extends Page {
         fPswButton.setFocusPainted(false);
 
         titleLabel.setFont(new java.awt.Font("Bahnschrift", 1, 24)); // NOI18N
-        titleLabel.setForeground(new java.awt.Color(0, 200, 83));
+        titleLabel.setForeground(new java.awt.Color(215, 201, 104));
         titleLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         titleLabel.setText("Registrati");
 
-        passwordInputField.setBackground(new java.awt.Color(44, 44, 44));
+        passwordInputField.setBackground(new java.awt.Color(65, 61, 63));
         passwordInputField.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         passwordInputField.setForeground(new java.awt.Color(153, 153, 153));
         passwordInputField.setText("password");
@@ -144,7 +144,7 @@ public class SignUpPage extends Page {
             }
         });
 
-        cognomeInputField.setBackground(new java.awt.Color(44, 44, 44));
+        cognomeInputField.setBackground(new java.awt.Color(65, 61, 63));
         cognomeInputField.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         cognomeInputField.setForeground(new java.awt.Color(153, 153, 153));
         cognomeInputField.setText("Cognome");
@@ -168,7 +168,7 @@ public class SignUpPage extends Page {
         userIcon2.setForeground(new java.awt.Color(204, 204, 204));
         userIcon2.setText("jLabel1");
 
-        nomeInputField.setBackground(new java.awt.Color(44, 44, 44));
+        nomeInputField.setBackground(new java.awt.Color(65, 61, 63));
         nomeInputField.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         nomeInputField.setForeground(new java.awt.Color(153, 153, 153));
         nomeInputField.setText("Nome");
@@ -294,23 +294,30 @@ public class SignUpPage extends Page {
 
     private void emailInputFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_emailInputFieldFocusLost
         if(emailInputField.getText().equals(""))
-            emailInputField.setText("Username");
+            emailInputField.setText("Email");
         emailInputField.setBorder(BorderFactory.createEmptyBorder(5, 15, 5, 5));
     }//GEN-LAST:event_emailInputFieldFocusLost
 
     private void signupButtonMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_signupButtonMouseExited
-        signupButton.setBackground(new java.awt.Color(0, 200, 83));
+        signupButton.setBackground(new java.awt.Color(215,201,104));
     }//GEN-LAST:event_signupButtonMouseExited
 
     private void passwordInputFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_passwordInputFieldFocusGained
-        if(passwordInputField.getText().equals("") || passwordInputField.getText().equals("Password"))
+        StringBuilder str = new StringBuilder();
+        for(char c : passwordInputField.getPassword())
+            str.append(c);
+        System.out.println(str.toString());
+        if(str.toString().equals("") || str.toString().equals("password"))
             passwordInputField.setText("");
         passwordInputField.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(new Color(150, 150, 150)), passwordInputField.getBorder()));
     }//GEN-LAST:event_passwordInputFieldFocusGained
 
     private void passwordInputFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_passwordInputFieldFocusLost
-        if(passwordInputField.getText().equals(""))
-            passwordInputField.setText("Password");
+        StringBuilder str = new StringBuilder();
+        for(char c : passwordInputField.getPassword())
+            str.append(c);
+        if(str.toString().equals(""))
+            passwordInputField.setText("password");
         passwordInputField.setBorder(BorderFactory.createEmptyBorder(5, 15, 5, 5));
     }//GEN-LAST:event_passwordInputFieldFocusLost
 
@@ -339,9 +346,8 @@ public class SignUpPage extends Page {
     }//GEN-LAST:event_nomeInputFieldFocusLost
 
     private void signupButtonMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_signupButtonMouseEntered
-        signupButton.setBackground(new java.awt.Color(0, 170, 72));
+        signupButton.setBackground(new java.awt.Color(245, 231, 142));
     }//GEN-LAST:event_signupButtonMouseEntered
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField cognomeInputField;
@@ -361,4 +367,21 @@ public class SignUpPage extends Page {
     private javax.swing.JLabel userIcon1;
     private javax.swing.JLabel userIcon2;
     // End of variables declaration//GEN-END:variables
+
+    public JTextField getCognomeInputField() {
+        return cognomeInputField;
+    }
+
+    public JTextField getEmailInputField() {
+        return emailInputField;
+    }
+
+    public JTextField getNomeInputField() {
+        return nomeInputField;
+    }
+
+    public JPasswordField getPasswordInputField() {
+        return passwordInputField;
+    }
+
 }

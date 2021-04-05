@@ -4,17 +4,20 @@ import main.PageManager;
 import main.audio.AudioManager;
 import main.pages.*;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.util.HashMap;
 
-public class ActionEventManager implements ActionListener {
+public class ButtonActionManager implements ActionListener {
 
     private final AudioManager audioManager;
     private final PageManager pageManager;
     private int id;
 
-    public ActionEventManager(AudioManager audioManager, PageManager pageManager, int id) {
+    public ButtonActionManager(AudioManager audioManager, PageManager pageManager, int id) {
         this.audioManager = audioManager;
         this.pageManager = pageManager;
         this.id = id;
@@ -69,23 +72,76 @@ public class ActionEventManager implements ActionListener {
             pageManager.getRootPage().showAudioBar(audioManager, pageManager);
             audioManager.startTrack();
         } else if(command.equals("login")) {
-            //fare il login
-            pageManager.getRootPage().getBackButton().setSize(pageManager.getRootPage().getBackButton().getWidth(), 22);
-            pageManager.getRootPage().getBackButton().setPreferredSize(new Dimension(pageManager.getRootPage().getBackButton().getWidth(), 22));
-            pageManager.getRootPage().getContentPane().setSize(1250, 628);
-            pageManager.getRootPage().getContentPane().setPreferredSize(new Dimension(1250, 628));
-            pageManager.getRootPage().pack();
-            pageManager.changeBackButtonAction(0, "", audioManager);
-            pageManager.changePage(new InitialPage(audioManager, pageManager, "initial"), audioManager);
+            LoginPage page = (LoginPage) ((JButton) e.getSource()).getParent().getParent().getParent().getParent();
+            String email = page.getEmailInputField().getText();
+            String psw = "";
+            StringBuilder str = new StringBuilder();
+            for(char c : page.getPasswordInputField().getPassword())
+                str.append(c);
+            psw = str.toString();
+
+            HashMap<String, String> params = new HashMap<>();
+            params.put("type", "login");
+            params.put("email", email);
+            params.put("password", psw);
+            int error = 1;
+            try {
+                error = pageManager.getDataManager().requestData(Integer.class, params);
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+
+            if(error == 0) {
+                pageManager.getRootPage().getBackButton().setSize(pageManager.getRootPage().getBackButton().getWidth(), 22);
+                pageManager.getRootPage().getBackButton().setPreferredSize(new Dimension(pageManager.getRootPage().getBackButton().getWidth(), 22));
+                pageManager.getRootPage().getContentPane().setSize(1250, 628);
+                pageManager.getRootPage().getContentPane().setPreferredSize(new Dimension(1250, 628));
+                pageManager.getRootPage().pack();
+                pageManager.changeBackButtonAction(0, "", audioManager);
+                pageManager.changePage(new InitialPage(audioManager, pageManager, "initial"), audioManager);
+            }
         } else if(command.equals("signup")) {
-            //fare la registrazione
-            pageManager.getRootPage().getBackButton().setSize(pageManager.getRootPage().getBackButton().getWidth(), 22);
-            pageManager.getRootPage().getBackButton().setPreferredSize(new Dimension(pageManager.getRootPage().getBackButton().getWidth(), 22));
-            pageManager.getRootPage().getContentPane().setSize(1250, 628);
-            pageManager.getRootPage().getContentPane().setPreferredSize(new Dimension(1250, 628));
+            SignUpPage page = (SignUpPage) ((JButton) e.getSource()).getParent().getParent().getParent().getParent();
+            String nome = page.getNomeInputField().getText();
+            String cognome = page.getCognomeInputField().getText();
+            String password = "";
+            String email = page.getEmailInputField().getText();
+
+            StringBuilder str = new StringBuilder();
+            for(char c : page.getPasswordInputField().getPassword())
+                str.append(c);
+            password = str.toString();
+
+            HashMap<String, String> params = new HashMap<>();
+            params.put("type", "signup");
+            params.put("nome", nome);
+            params.put("cognome", cognome);
+            params.put("email", password);
+            params.put("password", email);
+            int error = 1;
+            try {
+                error = pageManager.getDataManager().requestData(Integer.class, params);
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+
+            if(error == 0) {
+                pageManager.getRootPage().getBackButton().setSize(pageManager.getRootPage().getBackButton().getWidth(), 22);
+                pageManager.getRootPage().getBackButton().setPreferredSize(new Dimension(pageManager.getRootPage().getBackButton().getWidth(), 22));
+                pageManager.getRootPage().getContentPane().setSize(1250, 628);
+                pageManager.getRootPage().getContentPane().setPreferredSize(new Dimension(1250, 628));
+                pageManager.getRootPage().pack();
+                pageManager.changeBackButtonAction(0, "", audioManager);
+                pageManager.changePage(new InitialPage(audioManager, pageManager, "initial"), audioManager);
+            }
+        } else if(command.equals("logout")) {
+            audioManager.stopTrack();
+            pageManager.getRootPage().getContentPane().setSize(800, 600);
+            pageManager.getRootPage().getContentPane().setPreferredSize(new Dimension(800, 600));
             pageManager.getRootPage().pack();
+            pageManager.getRootPage().hideAudioBar(800);
             pageManager.changeBackButtonAction(0, "", audioManager);
-            pageManager.changePage(new InitialPage(audioManager, pageManager, "initial"), audioManager);
+            pageManager.changePage(new LoginPage(audioManager, pageManager, "login"), audioManager);
         } else if(command.equals("audioPause")) {
             pageManager.getRootPage().setAudioPaused(true);
             audioManager.pauseTrack();

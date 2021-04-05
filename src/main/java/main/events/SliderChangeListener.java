@@ -1,7 +1,5 @@
 package main.events;
 
-import main.MainApp;
-import main.PageManager;
 import main.audio.AudioManager;
 
 import javax.swing.*;
@@ -10,15 +8,15 @@ import javax.swing.event.ChangeListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class AudioSliderListener implements ChangeListener {
+public class SliderChangeListener implements ChangeListener {
 
     private final AudioManager audioManager;
-    private final MouseSliderListener mouseSliderListener;
+    private final SliderListener sliderListener;
     private boolean ignore;
 
-    public AudioSliderListener(AudioManager audioManager, MouseSliderListener mouseSliderListener) {
+    public SliderChangeListener(AudioManager audioManager, SliderListener sliderListener) {
         this.audioManager = audioManager;
-        this.mouseSliderListener = mouseSliderListener;
+        this.sliderListener = sliderListener;
         ignore = false;
     }
 
@@ -26,14 +24,14 @@ public class AudioSliderListener implements ChangeListener {
     public void stateChanged(ChangeEvent e) {
         JSlider slider = (JSlider) e.getSource();
         if(ignore) {
-            if(mouseSliderListener.isClicked()) {
+            if(sliderListener.isClicked()) {
                 audioManager.pauseTrack();
                 Timer delayed = new Timer(25, new ActionListener() {
                     @Override
                     public synchronized void actionPerformed(ActionEvent e) {
-                        audioManager.getCurrentTrack().setCurrentFrame(mouseSliderListener.getValueClicked());
-                        slider.setValue(mouseSliderListener.getValueClicked());
-                        mouseSliderListener.setClicked(false);
+                        audioManager.getCurrentTrack().setCurrentFrame(sliderListener.getValueClicked());
+                        slider.setValue(sliderListener.getValueClicked());
+                        sliderListener.setClicked(false);
                         audioManager.startTrack();
                     }
                 });

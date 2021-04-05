@@ -2,14 +2,14 @@ package main;
 
 import main.audio.AudioManager;
 import main.database.DataManager;
-import main.events.ActionEventManager;
+import main.events.ButtonActionManager;
 import main.pages.Page;
 import main.pages.RootPage;
 
 public class PageManager {
 
     private final DataManager dataManager;
-    private ActionEventManager backButtonListener;
+    private ButtonActionManager backButtonListener;
     private final RootPage rootPage;
 
     public PageManager(AudioManager audioManager) {
@@ -25,7 +25,7 @@ public class PageManager {
     public void changeBackButtonAction(int id, String command, AudioManager audioManager) {
         if(backButtonListener != null)
             rootPage.getBackButton().removeActionListener(backButtonListener);
-        backButtonListener = new ActionEventManager(audioManager, this, id);
+        backButtonListener = new ButtonActionManager(audioManager, this, id);
         rootPage.getBackButton().addActionListener(backButtonListener);
         rootPage.getBackButton().setActionCommand(command);
     }

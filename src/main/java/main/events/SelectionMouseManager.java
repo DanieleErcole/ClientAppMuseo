@@ -9,7 +9,7 @@ import main.pages.PaginaSelezione;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class MouseEventManager extends MouseAdapter {
+public class SelectionMouseManager extends MouseAdapter {
 
     private final AudioManager audioManager;
     private final PageManager pageManager;
@@ -17,7 +17,7 @@ public class MouseEventManager extends MouseAdapter {
     private final int backCodice;
     private int id;
 
-    public MouseEventManager(AudioManager audioManager, PageManager pageManager, int id, String typeSelection, int backCodice) {
+    public SelectionMouseManager(AudioManager audioManager, PageManager pageManager, int id, String typeSelection, int backCodice) {
         this.audioManager = audioManager;
         this.pageManager = pageManager;
         this.typeSelection = typeSelection;

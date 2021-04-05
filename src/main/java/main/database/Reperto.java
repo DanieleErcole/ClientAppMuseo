@@ -10,15 +10,15 @@ import java.util.ArrayList;
  */
 public class Reperto {
 
-    private int specie;
-    private int codice;
-    private String descrizione;
-    private String luogoRitrovamento;
-    private int annoRitrovamento;
-    private String mesh3DURL;
-    private String fotoURL;
-    private int teca;
-    private final ArrayList<URL> urlAudioguide;
+    public int specie;
+    public int codice;
+    public String descrizione;
+    public String luogoRitrovamento;
+    public int annoRitrovamento;
+    public String mesh3DURL;
+    public String fotoURL;
+    public int teca;
+    private ArrayList<URL> urlAudioguide;
     
     /*public Reperto(int codice, String nome, String descrizione, String luogoRitrovamento, int annoRitrovamento, String urlFoto) {
         this.codice = codice;

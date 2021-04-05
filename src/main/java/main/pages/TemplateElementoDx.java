@@ -8,7 +8,7 @@ package main.pages;
 import main.PageManager;
 import main.audio.AudioManager;
 import main.database.*;
-import main.events.MouseEventManager;
+import main.events.SelectionMouseManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -63,14 +63,13 @@ public class TemplateElementoDx extends Page {
             return;
         }
 
-        /*Image img = null;
         try {
-            img = dataManager.requestImage(room.getFotoURL());
-            img = new ImageIcon(img).getImage().getScaledInstance(440, 220, Image.SCALE_SMOOTH);
+            Image img = dataManager.requestImage(room.getPlanimetria());
+            img = new ImageIcon(img).getImage().getScaledInstance(344, 198, Image.SCALE_SMOOTH);
+            immagineElemento.setIcon(new ImageIcon(img));
         } catch (IOException e) {
-            e.printStackTrace();
             return;
-        }*/
+        }
 
         params = new HashMap<>();
         params.put("type", "periodoStorico");
@@ -83,7 +82,7 @@ public class TemplateElementoDx extends Page {
             return;
         }
 
-        this.addMouseListener(new MouseEventManager(audioManager, pageManager, codice, "case", backCodice));
+        this.addMouseListener(new SelectionMouseManager(audioManager, pageManager, codice, "case", backCodice));
         titoloElemento.setText("Sala periodo " + period.getNome());
     }
 
@@ -99,16 +98,9 @@ public class TemplateElementoDx extends Page {
             return;
         }
 
-        /*Image img = null;
-        try {
-            img = dataManager.requestImage(room.getFotoURL());
-            img = new ImageIcon(img).getImage().getScaledInstance(440, 220, Image.SCALE_SMOOTH);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return;
-        }*/
+        //TODO:foto teca
 
-        this.addMouseListener(new MouseEventManager(audioManager, pageManager, codice, "find", backCodice));
+        this.addMouseListener(new SelectionMouseManager(audioManager, pageManager, codice, "find", backCodice));
         titoloElemento.setText("Teca " + teca.getCodice());
         descrizione.setText(teca.getDescrizione());
     }
@@ -125,14 +117,13 @@ public class TemplateElementoDx extends Page {
             return;
         }
 
-        /*Image img = null;
         try {
-            img = dataManager.requestImage(room.getFotoURL());
-            img = new ImageIcon(img).getImage().getScaledInstance(440, 220, Image.SCALE_SMOOTH);
+            Image img = dataManager.requestImage(find.getFotoURL());
+            img = new ImageIcon(img).getImage().getScaledInstance(344, 198, Image.SCALE_SMOOTH);
+            immagineElemento.setIcon(new ImageIcon(img));
         } catch (IOException e) {
-            e.printStackTrace();
             return;
-        }*/
+        }
 
         params = new HashMap<>();
         params.put("type", "specie");
@@ -145,7 +136,7 @@ public class TemplateElementoDx extends Page {
             return;
         }
 
-        this.addMouseListener(new MouseEventManager(audioManager, pageManager, codice, "selectFind", backCodice));
+        this.addMouseListener(new SelectionMouseManager(audioManager, pageManager, codice, "selectFind", backCodice));
         titoloElemento.setText(specie.getNome());
         descrizione.setText(find.getDescrizione());
     }
@@ -166,30 +157,43 @@ public class TemplateElementoDx extends Page {
         descrizione = new javax.swing.JTextArea();
         titoloElemento = new javax.swing.JLabel();
 
-        setBackground(new java.awt.Color(35, 35, 35));
+        setBackground(new java.awt.Color(199, 190, 169));
         setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        setMaximumSize(new java.awt.Dimension(1250, 32767));
+        setPreferredSize(new java.awt.Dimension(1250, 250));
 
-        contenitoreImmagine.setBackground(new java.awt.Color(0, 170, 72));
+        contenitoreImmagine.setBackground(new java.awt.Color(60, 53, 57));
 
-        immagineElemento.setBackground(new java.awt.Color(0, 170, 72));
+        immagineElemento.setBackground(new java.awt.Color(60, 53, 57));
 
         javax.swing.GroupLayout contenitoreImmagineLayout = new javax.swing.GroupLayout(contenitoreImmagine);
         contenitoreImmagine.setLayout(contenitoreImmagineLayout);
         contenitoreImmagineLayout.setHorizontalGroup(
-            contenitoreImmagineLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(immagineElemento, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 350, Short.MAX_VALUE)
+                contenitoreImmagineLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 356, Short.MAX_VALUE)
+                        .addGroup(contenitoreImmagineLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(contenitoreImmagineLayout.createSequentialGroup()
+                                        .addContainerGap()
+                                        .addComponent(immagineElemento, javax.swing.GroupLayout.DEFAULT_SIZE, 344, Short.MAX_VALUE)
+                                        .addContainerGap()))
         );
         contenitoreImmagineLayout.setVerticalGroup(
-            contenitoreImmagineLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(immagineElemento, javax.swing.GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE)
+                contenitoreImmagineLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 210, Short.MAX_VALUE)
+                        .addGroup(contenitoreImmagineLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, contenitoreImmagineLayout.createSequentialGroup()
+                                        .addContainerGap()
+                                        .addComponent(immagineElemento, javax.swing.GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE)
+                                        .addContainerGap()))
         );
 
-        pannelloDescrizione.setBackground(new java.awt.Color(0, 170, 72));
+        pannelloDescrizione.setBackground(new java.awt.Color(60, 53, 57));
+        pannelloDescrizione.setPreferredSize(new java.awt.Dimension(484, 210));
 
         contenitoreDescrizione.setBorder(null);
 
         descrizione.setEditable(false);
-        descrizione.setBackground(new java.awt.Color(0, 170, 72));
+        descrizione.setBackground(new java.awt.Color(60, 53, 57));
         descrizione.setColumns(20);
         descrizione.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         descrizione.setForeground(new java.awt.Color(255, 255, 255));
@@ -208,42 +212,42 @@ public class TemplateElementoDx extends Page {
         javax.swing.GroupLayout pannelloDescrizioneLayout = new javax.swing.GroupLayout(pannelloDescrizione);
         pannelloDescrizione.setLayout(pannelloDescrizioneLayout);
         pannelloDescrizioneLayout.setHorizontalGroup(
-            pannelloDescrizioneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pannelloDescrizioneLayout.createSequentialGroup()
-                .addContainerGap(12, Short.MAX_VALUE)
-                .addGroup(pannelloDescrizioneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(titoloElemento, javax.swing.GroupLayout.PREFERRED_SIZE, 414, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(contenitoreDescrizione, javax.swing.GroupLayout.PREFERRED_SIZE, 457, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(15, 15, 15))
+                pannelloDescrizioneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pannelloDescrizioneLayout.createSequentialGroup()
+                                .addContainerGap(12, Short.MAX_VALUE)
+                                .addGroup(pannelloDescrizioneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(titoloElemento, javax.swing.GroupLayout.PREFERRED_SIZE, 414, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(contenitoreDescrizione, javax.swing.GroupLayout.PREFERRED_SIZE, 457, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(15, 15, 15))
         );
         pannelloDescrizioneLayout.setVerticalGroup(
-            pannelloDescrizioneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pannelloDescrizioneLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(titoloElemento, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(contenitoreDescrizione, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(21, Short.MAX_VALUE))
+                pannelloDescrizioneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pannelloDescrizioneLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(titoloElemento, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(contenitoreDescrizione, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap(27, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(pannelloDescrizione, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 392, Short.MAX_VALUE)
-                .addComponent(contenitoreImmagine, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(24, 24, 24))
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                                .addComponent(pannelloDescrizione, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(388, 388, 388)
+                                .addComponent(contenitoreImmagine, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 22, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(23, 23, 23)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(pannelloDescrizione, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(contenitoreImmagine, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(19, Short.MAX_VALUE))
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                                .addGap(19, 19, 19)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(contenitoreImmagine, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(pannelloDescrizione, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addContainerGap(21, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 

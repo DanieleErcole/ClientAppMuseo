@@ -4,11 +4,10 @@ package main.pages;
 import main.PageManager;
 import main.audio.AudioManager;
 import main.database.DataManager;
-import main.events.ActionEventManager;
+import main.events.ButtonActionManager;
 
 import java.awt.*;
-import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
+import javax.swing.*;
 
 /**
  *
@@ -25,11 +24,12 @@ public class LoginPage extends Page {
         userIcon.setIcon(new ImageIcon(getClass().getResource("/user-solid.png")));
         pswIcon.setIcon(new ImageIcon(getClass().getResource("/key-solid.png")));
 
-        loginButton.setActionCommand("signup");
-        loginButton.addActionListener(new ActionEventManager(audioManager, pageManager, 0));
+        loginButton.setActionCommand("login");
+        loginButton.addActionListener(new ButtonActionManager(audioManager, pageManager, 0));
         fPswButton.setActionCommand("change-signup");
-        fPswButton.addActionListener(new ActionEventManager(audioManager, pageManager, 0));
+        fPswButton.addActionListener(new ButtonActionManager(audioManager, pageManager, 0));
 
+        emailInputField.setText("Email");
         pageManager.getRootPage().getBackButton().setSize(pageManager.getRootPage().getBackButton().getWidth(), 0);
         pageManager.getRootPage().getBackButton().setPreferredSize(new Dimension(pageManager.getRootPage().getBackButton().getWidth(), 0));
     }
@@ -61,14 +61,14 @@ public class LoginPage extends Page {
         setMinimumSize(new java.awt.Dimension(800, 572));
         setPreferredSize(new java.awt.Dimension(800, 572));
 
-        jPanel3.setBackground(new java.awt.Color(0, 200, 83));
+        jPanel3.setBackground(new java.awt.Color(199, 190, 169));
         jPanel3.setPreferredSize(new java.awt.Dimension(800, 572));
 
-        jPanel2.setBackground(new java.awt.Color(34, 34, 34));
+        jPanel2.setBackground(new java.awt.Color(50, 44, 48));
 
-        jPanel1.setBackground(new java.awt.Color(34, 34, 34));
+        jPanel1.setBackground(new java.awt.Color(50, 44, 48));
 
-        emailInputField.setBackground(new java.awt.Color(44, 44, 44));
+        emailInputField.setBackground(new java.awt.Color(65, 61, 63));
         emailInputField.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         emailInputField.setForeground(new java.awt.Color(153, 153, 153));
         emailInputField.setText("Email");
@@ -90,9 +90,9 @@ public class LoginPage extends Page {
         userIcon.setBackground(new java.awt.Color(51, 51, 51));
         userIcon.setForeground(new java.awt.Color(204, 204, 204));
 
-        loginButton.setBackground(new java.awt.Color(0, 200, 83));
+        loginButton.setBackground(new java.awt.Color(215, 201, 104));
         loginButton.setFont(new java.awt.Font("Bahnschrift", 1, 18)); // NOI18N
-        loginButton.setForeground(new java.awt.Color(255, 255, 255));
+        loginButton.setForeground(new java.awt.Color(73, 73, 73));
         loginButton.setText("Login");
         loginButton.setActionCommand("login");
         loginButton.setBorder(null);
@@ -117,11 +117,11 @@ public class LoginPage extends Page {
         fPswButton.setFocusPainted(false);
 
         titleLabel.setFont(new java.awt.Font("Bahnschrift", 1, 24)); // NOI18N
-        titleLabel.setForeground(new java.awt.Color(0, 200, 83));
+        titleLabel.setForeground(new java.awt.Color(215, 201, 104));
         titleLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         titleLabel.setText("Login");
 
-        passwordInputField.setBackground(new java.awt.Color(44, 44, 44));
+        passwordInputField.setBackground(new java.awt.Color(65, 61, 63));
         passwordInputField.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         passwordInputField.setForeground(new java.awt.Color(153, 153, 153));
         passwordInputField.setText("password");
@@ -229,28 +229,34 @@ public class LoginPage extends Page {
 
     private void emailInputFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_emailInputFieldFocusLost
         if(emailInputField.getText().equals(""))
-            emailInputField.setText("Username");
+            emailInputField.setText("Email");
         emailInputField.setBorder(BorderFactory.createEmptyBorder(5, 15, 5, 5));
     }//GEN-LAST:event_emailInputFieldFocusLost
 
     private void passwordInputFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_passwordInputFieldFocusGained
-        if(passwordInputField.getText().equals("") || passwordInputField.getText().equals("Password"))
+        StringBuilder str = new StringBuilder();
+        for(char c : passwordInputField.getPassword())
+            str.append(c);
+        if(str.toString().equals("") || str.toString().equals("password"))
             passwordInputField.setText("");
         passwordInputField.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(new Color(150, 150, 150)), passwordInputField.getBorder()));
     }//GEN-LAST:event_passwordInputFieldFocusGained
 
     private void passwordInputFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_passwordInputFieldFocusLost
-        if(passwordInputField.getText().equals(""))
-            passwordInputField.setText("Password");
+        StringBuilder str = new StringBuilder();
+        for(char c : passwordInputField.getPassword())
+            str.append(c);
+        if(str.toString().equals(""))
+            passwordInputField.setText("password");
         passwordInputField.setBorder(BorderFactory.createEmptyBorder(5, 15, 5, 5));
     }//GEN-LAST:event_passwordInputFieldFocusLost
 
     private void loginButtonMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_loginButtonMouseEntered
-        loginButton.setBackground(new java.awt.Color(0, 170, 72));
+        loginButton.setBackground(new java.awt.Color(245, 231, 142));
     }//GEN-LAST:event_loginButtonMouseEntered
 
     private void loginButtonMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_loginButtonMouseExited
-        loginButton.setBackground(new java.awt.Color(0, 200, 83));
+        loginButton.setBackground(new java.awt.Color(215,201,104));
     }//GEN-LAST:event_loginButtonMouseExited
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -267,5 +273,13 @@ public class LoginPage extends Page {
     private javax.swing.JLabel titleLabel;
     private javax.swing.JLabel userIcon;
     // End of variables declaration//GEN-END:variables
+
+    public JTextField getEmailInputField() {
+        return emailInputField;
+    }
+
+    public JPasswordField getPasswordInputField() {
+        return passwordInputField;
+    }
 
 }

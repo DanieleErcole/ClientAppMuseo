@@ -4,7 +4,7 @@ package main.pages;
 import main.PageManager;
 import main.audio.AudioManager;
 import main.database.DataManager;
-import main.events.ActionEventManager;
+import main.events.ButtonActionManager;
 
 /**
  *
@@ -19,7 +19,7 @@ public class InitialPage extends Page {
         super(name);
         initComponents();
         jButton1.setActionCommand("change-selectionRoom");
-        jButton1.addActionListener(new ActionEventManager(audioManager, pageManager, 0));
+        jButton1.addActionListener(new ButtonActionManager(audioManager, pageManager, 0));
     }
 
     @Override
@@ -37,15 +37,15 @@ public class InitialPage extends Page {
         jLabel1 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
 
-        setBackground(new java.awt.Color(34, 34, 34));
+        setBackground(new java.awt.Color(65, 61, 63));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Clicca per accedere alla selezione delle sale e visitare il museo");
 
-        jButton1.setBackground(new java.awt.Color(0, 170, 72));
-        jButton1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(255, 255, 255));
+        jButton1.setBackground(new java.awt.Color(215, 201, 104));
+        jButton1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jButton1.setForeground(new java.awt.Color(73, 73, 73));
         jButton1.setText("Vai al tour");
         jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButton1.setFocusPainted(false);
@@ -83,11 +83,11 @@ public class InitialPage extends Page {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseEntered
-        jButton1.setBackground(new java.awt.Color(0, 200, 83));
+        jButton1.setBackground(new java.awt.Color(245, 231, 142));
     }//GEN-LAST:event_jButton1MouseEntered
 
     private void jButton1MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseExited
-        jButton1.setBackground(new java.awt.Color(0, 170, 72));
+        jButton1.setBackground(new java.awt.Color(215,201,104));
     }//GEN-LAST:event_jButton1MouseExited
 
 

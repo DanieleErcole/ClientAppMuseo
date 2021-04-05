@@ -1,13 +1,11 @@
 package main;
 
 import com.formdev.flatlaf.FlatDarkLaf;
-import com.sun.j3d.utils.universe.SimpleUniverse;
 import main.audio.AudioManager;
-import main.events.AudioSliderListener;
-import main.events.MouseSliderListener;
+import main.events.SliderChangeListener;
+import main.events.SliderListener;
 import main.pages.*;
 
-import javax.media.j3d.Canvas3D;
 import javax.swing.*;
 import java.awt.*;
 
@@ -15,19 +13,19 @@ public class MainApp {
 
     private final PageManager pageManager;
     private final AudioManager audioManager;
-    private final AudioSliderListener changeListener;
-    private final MouseSliderListener mouseSliderListener;
+    private final SliderChangeListener changeListener;
+    private final SliderListener sliderListener;
 
     public MainApp() {
         audioManager = new AudioManager();
         pageManager = new PageManager(audioManager);
-        mouseSliderListener = new MouseSliderListener(pageManager);
-        changeListener = new AudioSliderListener(audioManager, mouseSliderListener);
+        sliderListener = new SliderListener(pageManager);
+        changeListener = new SliderChangeListener(audioManager, sliderListener);
     }
 
     public void startApplication() {
         pageManager.getRootPage().getTimeSlider().addChangeListener(changeListener);
-        pageManager.getRootPage().getTimeSlider().addMouseListener(mouseSliderListener);
+        pageManager.getRootPage().getTimeSlider().addMouseListener(sliderListener);
         audioManager.initAudioTimer(pageManager.getRootPage(), changeListener);
 
         LoginPage page = new LoginPage(audioManager, pageManager, "login");

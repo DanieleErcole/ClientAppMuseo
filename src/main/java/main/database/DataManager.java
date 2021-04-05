@@ -1,9 +1,6 @@
 package main.database;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.introspect.VisibilityChecker;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -13,6 +10,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+
 
 public class DataManager {
 
@@ -25,6 +23,15 @@ public class DataManager {
         this.url = url;
     }
 
+    /**
+     * Metodo che invia una richiesta al server (metodo GET), che risponderà con un formato .json, che verrà convertito in un'istanza
+     * della classe specificata come parametro
+     * @param dataClass classe dell'oggetto da richiedere
+     * @param params parametri da inviare al server
+     * @param <T> tipo di oggetto da richiedere
+     * @return Oggetto convertito
+     * @throws IOException
+     */
     public <T> T requestData(Class<T> dataClass, HashMap<String, String> params) throws IOException {
         StringBuilder requestUrl = new StringBuilder("http://" + hostname + ":80/TestAppMuseo/" + url + "?");
         for(Map.Entry e : params.entrySet()) {
@@ -32,18 +39,14 @@ public class DataManager {
             if(params.entrySet().size() > 1)
                 requestUrl.append("&");
         }
-        //if(params.entrySet().size() > 1)
-            //requestUrl.deleteCharAt(params.entrySet().size() - 1);
 
         InputStream stream;
         httpConnection = (HttpURLConnection) new URL(requestUrl.toString()).openConnection();
+        httpConnection.setRequestMethod("GET");
         httpConnection.setRequestProperty("accept", "application/json");
         stream = httpConnection.getInputStream();
 
         ObjectMapper mapper = new ObjectMapper();
-        mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-        mapper.setVisibility(VisibilityChecker.Std.defaultInstance().withFieldVisibility(JsonAutoDetect.Visibility.ANY));
-
         T object = mapper.readValue(stream, dataClass);
         stream.close();
         httpConnection.disconnect();

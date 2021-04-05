@@ -18,7 +18,6 @@ public class Specie {
     private String classe;
     private String phylum;
     private String regno;
-    private int probabilità;
     
     /*public Specie(String nome, String genere, String famiglia, String ordine, String classe, String phylum, String regno, int probabilità){
         this.nome = nome;
@@ -57,10 +56,6 @@ public class Specie {
     
     public String getRegno(){
         return regno;
-    }
-    
-    public int getProbabilità(){
-        return probabilità;
     }
 
 }

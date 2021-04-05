@@ -3,7 +3,7 @@ package main.pages;
 
 import main.PageManager;
 import main.audio.AudioManager;
-import main.events.ActionEventManager;
+import main.events.ButtonActionManager;
 
 import java.awt.*;
 import java.util.HashMap;
@@ -30,7 +30,7 @@ public class RootPage extends JFrame {
     private ImageIcon backImgHover;
 
     private boolean isAudioPaused;
-    private HashMap<JButton, ActionEventManager> audioActionlisteners;
+    private HashMap<JButton, ButtonActionManager> audioActionlisteners;
 
     /**
      * Creates new form RootPage
@@ -65,7 +65,9 @@ public class RootPage extends JFrame {
         nextButton.setActionCommand("audioNext");
         precButton.setActionCommand("audioPrevious");
         stopButton.setActionCommand("audioStop");
-        stopButton.addActionListener(new ActionEventManager(audioManager, pageManager, 0));
+        stopButton.addActionListener(new ButtonActionManager(audioManager, pageManager, 0));
+        jButton1.setActionCommand("logout");
+        jButton1.addActionListener(new ButtonActionManager(audioManager, pageManager, 0));
         
         this.pack();
         this.setLocationRelativeTo(null);
@@ -102,7 +104,7 @@ public class RootPage extends JFrame {
         rootPanel.setBorder(null);
         rootPanel.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
-        frameBar.setBackground(new java.awt.Color(28, 28, 28));
+        frameBar.setBackground(new java.awt.Color(50, 44, 48));
 
         jButton1.setBackground(new java.awt.Color(66, 67, 68));
         jButton1.setForeground(new java.awt.Color(255, 255, 255));
@@ -153,18 +155,19 @@ public class RootPage extends JFrame {
                                 .addGap(3, 3, 3))
         );
 
-        audioBar.setBackground(new java.awt.Color(28, 28, 28));
+        audioBar.setBackground(new java.awt.Color(50, 44, 48));
         audioBar.setPreferredSize(new java.awt.Dimension(1250, 75));
 
+        timeSlider.setForeground(new java.awt.Color(215, 201, 104));
         timeSlider.setValue(0);
         timeSlider.setFocusable(false);
 
-        leftTimeLabel.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        leftTimeLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         leftTimeLabel.setForeground(new java.awt.Color(255, 255, 255));
         leftTimeLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         leftTimeLabel.setText("--:--");
 
-        rightTimeLabel.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        rightTimeLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         rightTimeLabel.setForeground(new java.awt.Color(255, 255, 255));
         rightTimeLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         rightTimeLabel.setText("--:--");
@@ -230,13 +233,13 @@ public class RootPage extends JFrame {
                         .addGroup(audioBarLayout.createSequentialGroup()
                                 .addGroup(audioBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addGroup(audioBarLayout.createSequentialGroup()
-                                                .addContainerGap(161, Short.MAX_VALUE)
-                                                .addComponent(leftTimeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(leftTimeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                 .addComponent(timeSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 830, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(rightTimeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGap(71, 71, 71))
+                                                .addComponent(rightTimeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(88, 88, 88))
                                         .addGroup(audioBarLayout.createSequentialGroup()
                                                 .addGap(14, 14, 14)
                                                 .addComponent(titleLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -257,7 +260,7 @@ public class RootPage extends JFrame {
                         .addGroup(audioBarLayout.createSequentialGroup()
                                 .addGroup(audioBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, audioBarLayout.createSequentialGroup()
-                                                .addGap(0, 7, Short.MAX_VALUE)
+                                                .addGap(0, 0, Short.MAX_VALUE)
                                                 .addComponent(stopButton, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addGap(10, 10, 10))
                                         .addGroup(audioBarLayout.createSequentialGroup()
@@ -265,14 +268,14 @@ public class RootPage extends JFrame {
                                                 .addGroup(audioBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                         .addComponent(precButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                                         .addGroup(audioBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                                .addComponent(nextButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                                .addComponent(nextButton, javax.swing.GroupLayout.DEFAULT_SIZE, 44, Short.MAX_VALUE)
                                                                 .addComponent(centerButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                                                 .addComponent(titleLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                                 .addGap(1, 1, 1)))
-                                .addGroup(audioBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(leftTimeLabel, javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addComponent(timeSlider, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(rightTimeLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(audioBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(timeSlider, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(leftTimeLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(rightTimeLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addContainerGap())
                         .addGroup(javax.swing.GroupLayout.Alignment.LEADING, audioBarLayout.createSequentialGroup()
                                 .addGap(17, 17, 17)
@@ -304,10 +307,6 @@ public class RootPage extends JFrame {
     public void setPage(Page page) {
         rootPanel.setViewportView(page);
     }
-
-    public javax.swing.JScrollPane getRootPanel() {
-        return rootPanel;
-    }
     
     public void hideAudioBar(int newWidth) {
         centerButton.removeActionListener(audioActionlisteners.get(centerButton));
@@ -324,10 +323,10 @@ public class RootPage extends JFrame {
     }
     
     public void showAudioBar(AudioManager audioManager, PageManager pageManager) {
-        ActionEventManager listener = new ActionEventManager(audioManager, pageManager, 0);
-        centerButton.addActionListener(new ActionEventManager(audioManager, pageManager, 0));
+        ButtonActionManager listener = new ButtonActionManager(audioManager, pageManager, 0);
+        centerButton.addActionListener(new ButtonActionManager(audioManager, pageManager, 0));
         audioActionlisteners.put(centerButton, listener);
-        listener = new ActionEventManager(audioManager, pageManager, audioManager.getCurrentTrack().getIndex());
+        listener = new ButtonActionManager(audioManager, pageManager, audioManager.getCurrentTrack().getIndex());
         precButton.addActionListener(listener);
         nextButton.addActionListener(listener);
         audioActionlisteners.put(precButton, listener);

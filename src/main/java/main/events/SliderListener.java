@@ -6,13 +6,13 @@ import main.PageManager;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class MouseSliderListener extends MouseAdapter {
+public class SliderListener extends MouseAdapter {
 
     private final PageManager pageManager;
     private boolean clicked;
     private int valueClicked;
 
-    public MouseSliderListener(PageManager pageManager) {
+    public SliderListener(PageManager pageManager) {
         this.pageManager = pageManager;
         clicked = false;
         valueClicked = 0;

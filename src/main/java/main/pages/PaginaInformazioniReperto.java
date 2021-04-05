@@ -65,16 +65,6 @@ public class PaginaInformazioniReperto extends Page {
             return;
         }
 
-        //Immagine reperto
-        Image img = null;
-        try {
-            img = dataManager.requestImage(reperto.getFotoURL());
-            img = new ImageIcon(img).getImage().getScaledInstance(440, 220, Image.SCALE_SMOOTH);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return;
-        }
-
         ArrayList<String> languages = new ArrayList<>();
         languages.add("italiano");
         languages.add("inglese");
@@ -88,15 +78,16 @@ public class PaginaInformazioniReperto extends Page {
         languages.add("coreano");
         HashMap<String, String> bandiere = this.getBandiere(languages);
 
-        //Parte file audio
+        //File audio
         this.getAudioFiles(dataManager, languages);
         audioManager.setFind(reperto);
         JPanel viewport = new JPanel(null);
         viewport.setBackground(new Color(20, 20, 20));
         viewport.setPreferredSize(new Dimension(228, reperto.getUrlAudioguide().size() * 62));
         for(int i = 0; i < reperto.getUrlAudioguide().size(); i++) {
+            String[] array = reperto.getUrlAudioguide().get(i).getPath().split("/");
             TemplateAudioguida template = new TemplateAudioguida(i, audioManager, pageManager, new ImageIcon(getClass().getResource(
-                    "/" + bandiere.get(languages.get(i)))).getImage().getScaledInstance(42, 31, Image.SCALE_SMOOTH));
+                    "/" + bandiere.get(languages.get(i)))).getImage().getScaledInstance(42, 31, Image.SCALE_SMOOTH), array[array.length - 1]);
             template.setLocation(0, i * 62);
             template.setSize(228, 62);
             viewport.add(template);
@@ -187,11 +178,11 @@ public class PaginaInformazioniReperto extends Page {
         separatoreNome = new javax.swing.JPanel();
         contenitoreAudioguide = new javax.swing.JScrollPane();
 
-        setBackground(new java.awt.Color(34, 34, 34));
+        setBackground(new java.awt.Color(199, 190, 169));
         setLayout(null);
 
-        pannelloRitrovamento.setBackground(new java.awt.Color(50, 50, 50));
-        pannelloRitrovamento.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(50, 50, 50)), "Ritrovamento"));
+        pannelloRitrovamento.setBackground(new java.awt.Color(131, 123, 104));
+        pannelloRitrovamento.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(131, 123, 104)), "Ritrovamento", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(202, 202, 202))); // NOI18N
 
         ritrovamentoReperto.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
         ritrovamentoReperto.setForeground(new java.awt.Color(255, 255, 255));
@@ -214,8 +205,8 @@ public class PaginaInformazioniReperto extends Page {
         add(pannelloRitrovamento);
         pannelloRitrovamento.setBounds(520, 90, 230, 53);
 
-        pannelloSpecie.setBackground(new java.awt.Color(50, 50, 50));
-        pannelloSpecie.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(50, 50, 50)), "Specie"));
+        pannelloSpecie.setBackground(new java.awt.Color(131, 123, 104));
+        pannelloSpecie.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(131, 123, 104)), "Specie", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(202, 202, 202))); // NOI18N
 
         specieReperto.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
         specieReperto.setForeground(new java.awt.Color(255, 255, 255));
@@ -238,8 +229,8 @@ public class PaginaInformazioniReperto extends Page {
         add(pannelloSpecie);
         pannelloSpecie.setBounds(750, 90, 240, 53);
 
-        pannelloGenere.setBackground(new java.awt.Color(50, 50, 50));
-        pannelloGenere.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(50, 50, 50)), "Genere"));
+        pannelloGenere.setBackground(new java.awt.Color(131, 123, 104));
+        pannelloGenere.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(131, 123, 104)), "Genere", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(202, 202, 202))); // NOI18N
 
         genereReperto.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
         genereReperto.setForeground(new java.awt.Color(255, 255, 255));
@@ -262,8 +253,8 @@ public class PaginaInformazioniReperto extends Page {
         add(pannelloGenere);
         pannelloGenere.setBounds(520, 140, 230, 53);
 
-        pannelloFamiglia.setBackground(new java.awt.Color(50, 50, 50));
-        pannelloFamiglia.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(50, 50, 50)), "Famiglia"));
+        pannelloFamiglia.setBackground(new java.awt.Color(131, 123, 104));
+        pannelloFamiglia.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(131, 123, 104)), "Famiglia", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(202, 202, 202))); // NOI18N
 
         famigliaReperto.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
         famigliaReperto.setForeground(new java.awt.Color(255, 255, 255));
@@ -286,8 +277,8 @@ public class PaginaInformazioniReperto extends Page {
         add(pannelloFamiglia);
         pannelloFamiglia.setBounds(750, 140, 240, 53);
 
-        pannelloOrdine.setBackground(new java.awt.Color(50, 50, 50));
-        pannelloOrdine.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(50, 50, 50)), "Ordine"));
+        pannelloOrdine.setBackground(new java.awt.Color(131, 123, 104));
+        pannelloOrdine.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(131, 123, 104)), "Ordine", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(202, 202, 202))); // NOI18N
 
         ordineReperto.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
         ordineReperto.setForeground(new java.awt.Color(255, 255, 255));
@@ -310,8 +301,8 @@ public class PaginaInformazioniReperto extends Page {
         add(pannelloOrdine);
         pannelloOrdine.setBounds(520, 190, 230, 53);
 
-        pannelloClasse.setBackground(new java.awt.Color(50, 50, 50));
-        pannelloClasse.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(50, 50, 50)), "Classe"));
+        pannelloClasse.setBackground(new java.awt.Color(131, 123, 104));
+        pannelloClasse.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(131, 123, 104)), "Classe", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(202, 202, 202))); // NOI18N
 
         classeReperto.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
         classeReperto.setForeground(new java.awt.Color(255, 255, 255));
@@ -334,8 +325,8 @@ public class PaginaInformazioniReperto extends Page {
         add(pannelloClasse);
         pannelloClasse.setBounds(750, 190, 240, 53);
 
-        pannelloPhylum.setBackground(new java.awt.Color(50, 50, 50));
-        pannelloPhylum.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(50, 50, 50)), "Phylum"));
+        pannelloPhylum.setBackground(new java.awt.Color(131, 123, 104));
+        pannelloPhylum.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(131, 123, 104)), "Phylum", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(202, 202, 202))); // NOI18N
 
         phylumReperto.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
         phylumReperto.setForeground(new java.awt.Color(255, 255, 255));
@@ -358,8 +349,8 @@ public class PaginaInformazioniReperto extends Page {
         add(pannelloPhylum);
         pannelloPhylum.setBounds(520, 240, 230, 53);
 
-        pannelloRegno.setBackground(new java.awt.Color(50, 50, 50));
-        pannelloRegno.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(50, 50, 50)), "Regno"));
+        pannelloRegno.setBackground(new java.awt.Color(131, 123, 104));
+        pannelloRegno.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(131, 123, 104)), "Regno", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(202, 202, 202))); // NOI18N
 
         regnoReperto.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
         regnoReperto.setForeground(new java.awt.Color(255, 255, 255));
@@ -382,12 +373,12 @@ public class PaginaInformazioniReperto extends Page {
         add(pannelloRegno);
         pannelloRegno.setBounds(750, 240, 240, 53);
 
-        contenitorePannelloDescrizione.setBackground(new java.awt.Color(50, 50, 50));
-        contenitorePannelloDescrizione.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(50, 50, 50)), "Descrizione"));
+        contenitorePannelloDescrizione.setBackground(new java.awt.Color(131, 123, 104));
+        contenitorePannelloDescrizione.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(131, 123, 104)), "Descrizione", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(202, 202, 202))); // NOI18N
 
         contenitoreDescrizione.setBorder(null);
 
-        descrizioneReperto.setBackground(new java.awt.Color(50, 50, 50));
+        descrizioneReperto.setBackground(new java.awt.Color(131, 123, 104));
         descrizioneReperto.setColumns(20);
         descrizioneReperto.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
         descrizioneReperto.setForeground(new java.awt.Color(255, 255, 255));
@@ -420,8 +411,9 @@ public class PaginaInformazioniReperto extends Page {
         add(contenitorePannelloDescrizione);
         contenitorePannelloDescrizione.setBounds(520, 320, 470, 250);
 
-        contenitoreTitolo.setBackground(new java.awt.Color(34, 34, 34));
+        contenitoreTitolo.setBackground(new java.awt.Color(131, 123, 104));
 
+        titoloReperto.setBackground(new java.awt.Color(77, 55, 71));
         titoloReperto.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         titoloReperto.setForeground(new java.awt.Color(255, 255, 255));
         titoloReperto.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -431,10 +423,10 @@ public class PaginaInformazioniReperto extends Page {
         contenitoreTitolo.setLayout(contenitoreTitoloLayout);
         contenitoreTitoloLayout.setHorizontalGroup(
                 contenitoreTitoloLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, contenitoreTitoloLayout.createSequentialGroup()
+                        .addGroup(contenitoreTitoloLayout.createSequentialGroup()
                                 .addContainerGap()
-                                .addComponent(titoloReperto, javax.swing.GroupLayout.DEFAULT_SIZE, 950, Short.MAX_VALUE)
-                                .addContainerGap())
+                                .addComponent(titoloReperto, javax.swing.GroupLayout.PREFERRED_SIZE, 1013, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         contenitoreTitoloLayout.setVerticalGroup(
                 contenitoreTitoloLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -445,9 +437,9 @@ public class PaginaInformazioniReperto extends Page {
         );
 
         add(contenitoreTitolo);
-        contenitoreTitolo.setBounds(0, 0, 970, 50);
+        contenitoreTitolo.setBounds(0, 0, 1020, 50);
 
-        canvasReperto3D.setBackground(new java.awt.Color(34, 34, 34));
+        canvasReperto3D.setBackground(new java.awt.Color(199, 190, 169));
 
         javax.swing.GroupLayout canvasReperto3DLayout = new javax.swing.GroupLayout(canvasReperto3D);
         canvasReperto3D.setLayout(canvasReperto3DLayout);
@@ -463,7 +455,7 @@ public class PaginaInformazioniReperto extends Page {
         add(canvasReperto3D);
         canvasReperto3D.setBounds(30, 90, 460, 480);
 
-        pannelloAudioguide.setBackground(new java.awt.Color(20, 20, 20));
+        pannelloAudioguide.setBackground(new java.awt.Color(60, 53, 57));
         pannelloAudioguide.setLayout(null);
 
         nomePannello.setFont(new java.awt.Font("Tahoma", 0, 20)); // NOI18N
@@ -473,7 +465,7 @@ public class PaginaInformazioniReperto extends Page {
         pannelloAudioguide.add(nomePannello);
         nomePannello.setBounds(11, 22, 208, 25);
 
-        separatoreNome.setBackground(new java.awt.Color(50, 50, 50));
+        separatoreNome.setBackground(new java.awt.Color(136, 138, 145));
 
         javax.swing.GroupLayout separatoreNomeLayout = new javax.swing.GroupLayout(separatoreNome);
         separatoreNome.setLayout(separatoreNomeLayout);
