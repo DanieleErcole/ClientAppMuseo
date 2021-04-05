@@ -24,11 +24,13 @@ public class SliderChangeListener implements ChangeListener {
     public void stateChanged(ChangeEvent e) {
         JSlider slider = (JSlider) e.getSource();
         if(ignore) {
+            //Controlla che l'AudioTimerListener non stia aggiornando lo slider e che l'utente abbia cliccato il mouse
             if(sliderMouseListener.isClicked()) {
                 audioManager.pauseTrack();
                 Timer delayed = new Timer(25, new ActionListener() {
                     @Override
                     public synchronized void actionPerformed(ActionEvent e) {
+                        System.out.println("ciao");
                         audioManager.getCurrentTrack().setCurrentFrame(sliderMouseListener.getValueClicked());
                         slider.setValue(sliderMouseListener.getValueClicked());
                         sliderMouseListener.setClicked(false);

@@ -119,8 +119,8 @@ public class ButtonActionManager implements ActionListener {
             params.put("type", "signup");
             params.put("nome", nome);
             params.put("cognome", cognome);
-            params.put("email", password);
-            params.put("password", email);
+            params.put("email", email);
+            params.put("password", password);
             int error = 1;
             try {
                 error = pageManager.getDataManager().requestData(Integer.class, params);
@@ -138,7 +138,8 @@ public class ButtonActionManager implements ActionListener {
                 pageManager.changePage(new InitialPage(audioManager, pageManager, "initial"), audioManager);
             }
         } else if(command.equals("logout")) {
-            audioManager.stopTrack();
+            if(audioManager.getCurrentTrack() != null)
+                audioManager.stopTrack();
             pageManager.getRootPage().getContentPane().setSize(800, 600);
             pageManager.getRootPage().getContentPane().setPreferredSize(new Dimension(800, 600));
             pageManager.getRootPage().pack();
