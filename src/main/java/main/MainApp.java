@@ -3,7 +3,7 @@ package main;
 import com.formdev.flatlaf.FlatDarkLaf;
 import main.audio.AudioManager;
 import main.events.SliderChangeListener;
-import main.events.SliderListener;
+import main.events.SliderMouseListener;
 import main.pages.*;
 
 import javax.swing.*;
@@ -14,18 +14,18 @@ public class MainApp {
     private final PageManager pageManager;
     private final AudioManager audioManager;
     private final SliderChangeListener changeListener;
-    private final SliderListener sliderListener;
+    private final SliderMouseListener sliderMouseListener;
 
     public MainApp() {
         audioManager = new AudioManager();
         pageManager = new PageManager(audioManager);
-        sliderListener = new SliderListener(pageManager);
-        changeListener = new SliderChangeListener(audioManager, sliderListener);
+        sliderMouseListener = new SliderMouseListener(pageManager);
+        changeListener = new SliderChangeListener(audioManager, sliderMouseListener);
     }
 
     public void startApplication() {
         pageManager.getRootPage().getTimeSlider().addChangeListener(changeListener);
-        pageManager.getRootPage().getTimeSlider().addMouseListener(sliderListener);
+        pageManager.getRootPage().getTimeSlider().addMouseListener(sliderMouseListener);
         audioManager.initAudioTimer(pageManager.getRootPage(), changeListener);
 
         LoginPage page = new LoginPage(audioManager, pageManager, "login");

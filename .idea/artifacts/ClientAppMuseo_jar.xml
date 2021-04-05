@@ -1,0 +1,15 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="ClientAppMuseo:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/ClientAppMuseo_jar</output-path>
+    <root id="archive" name="ClientAppMuseo.jar">
+      <element id="module-output" name="ClientAppMuseo" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/j3dcore.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/jackson-annotations-2.9.9.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/flatlaf-1.1.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/jackson-core-2.9.9.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/j3dutils.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/vecmath.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/jackson-databind-2.9.9.3.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
