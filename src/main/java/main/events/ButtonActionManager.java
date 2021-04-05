@@ -59,6 +59,8 @@ public class ButtonActionManager implements ActionListener {
             if(page != null)
                 pageManager.changePage(page, audioManager);
         } else if(command.contains("audioStart-")) {
+            if(audioManager.getCurrentTrack() != null)
+                audioManager.stopTrack();
             id = Integer.parseInt(command.substring(11)); //L'indice che corrisponde alla traccia in riproduzione
             pageManager.getRootPage().setAudioPaused(false);
             audioManager.addTrack(audioManager.getFind().getUrlAudioguide().get(id), id);
@@ -69,6 +71,7 @@ public class ButtonActionManager implements ActionListener {
             pageManager.getRootPage().getContentPane().setSize(1250, 703);
             pageManager.getRootPage().getContentPane().setPreferredSize(new Dimension(1250, 703));
             pageManager.getRootPage().pack();
+            pageManager.getRootPage().hideAudioBar(1250);
             pageManager.getRootPage().showAudioBar(audioManager, pageManager);
             audioManager.startTrack();
         } else if(command.equals("login")) {
@@ -151,16 +154,16 @@ public class ButtonActionManager implements ActionListener {
             audioManager.resumeTrack();
             pageManager.getRootPage().getCenterButton().setActionCommand("audioPause");
         } else if(command.equals("audioNext")) {
-            id = id + 1 < audioManager.getFind().getUrlAudioguide().size() ? id + 1 : 0;
-            audioManager.stopTrack();
-            audioManager.addTrack(audioManager.getFind().getUrlAudioguide().get(id), id);
+            audioManager.next();
+            String[] array = audioManager.getCurrentTrack().getClipURL().getPath().split("/");
+            pageManager.getRootPage().getTitleLabel().setText(array[array.length - 1]);
             pageManager.getRootPage().getTimeSlider().setValue(0);
             pageManager.getRootPage().getTimeSlider().setMaximum(audioManager.getCurrentTrack().getThisClip().getFrameLength());
             audioManager.startTrack();
         } else if(command.equals("audioPrevious")) {
-            id = id - 1 >= 0 ? id - 1 : audioManager.getFind().getUrlAudioguide().size() - 1;
-            audioManager.stopTrack();
-            audioManager.addTrack(audioManager.getFind().getUrlAudioguide().get(id), id);
+            audioManager.previous();
+            String[] array = audioManager.getCurrentTrack().getClipURL().getPath().split("/");
+            pageManager.getRootPage().getTitleLabel().setText(array[array.length - 1]);
             pageManager.getRootPage().getTimeSlider().setValue(0);
             pageManager.getRootPage().getTimeSlider().setMaximum(audioManager.getCurrentTrack().getThisClip().getFrameLength());
             audioManager.startTrack();

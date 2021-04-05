@@ -324,7 +324,7 @@ public class RootPage extends JFrame {
     
     public void showAudioBar(AudioManager audioManager, PageManager pageManager) {
         ButtonActionManager listener = new ButtonActionManager(audioManager, pageManager, 0);
-        centerButton.addActionListener(new ButtonActionManager(audioManager, pageManager, 0));
+        centerButton.addActionListener(listener);
         audioActionlisteners.put(centerButton, listener);
         listener = new ButtonActionManager(audioManager, pageManager, audioManager.getCurrentTrack().getIndex());
         precButton.addActionListener(listener);

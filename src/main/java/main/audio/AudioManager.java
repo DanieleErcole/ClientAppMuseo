@@ -53,6 +53,18 @@ public class AudioManager {
         });
     }
 
+    public void next() {
+        int currentTrackIndex = currentTrack.getIndex() + 1 < find.getUrlAudioguide().size() ? currentTrack.getIndex() + 1 : 0;
+        this.stopTrack();
+        this.addTrack(find.getUrlAudioguide().get(currentTrackIndex), currentTrackIndex);
+    }
+
+    public void previous() {
+        int currentTrackIndex = currentTrack.getIndex() - 1 >= 0 ? currentTrack.getIndex() - 1 : find.getUrlAudioguide().size() - 1;
+        this.stopTrack();
+        this.addTrack(find.getUrlAudioguide().get(currentTrackIndex), currentTrackIndex);
+    }
+
     public void startTrack() {
         currentTrack.start();
     }
