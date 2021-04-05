@@ -2,19 +2,16 @@ package main.database;
 
 import java.util.Date;
 
+/**
+ * Classe che contiene informazioni riguardanti un biglietto
+ * @author Simone Raffo
+ */
 public class Ticket {
 
     private String nome;
     private String codice;
     private Date data;
     private TicketType tipoBiglietto;
-
-    /*public Ticket(String nome, String codice, Date data, TicketType tipoBiglietto) {
-        this.nome = nome;
-        this.codice = codice;
-        this.data = data;
-        this.tipoBiglietto = tipoBiglietto;
-    }*/
 
     public String getNome() {
         return nome;

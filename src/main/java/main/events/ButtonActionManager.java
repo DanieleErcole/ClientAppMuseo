@@ -11,6 +11,10 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.HashMap;
 
+/**
+ * Classe che gestisce tutti i pulsanti presenti nell'applicazione
+ * @author Daniele Pelizzoni e Simone Raffo
+ */
 public class ButtonActionManager implements ActionListener {
 
     private final AudioManager audioManager;

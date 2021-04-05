@@ -1,15 +1,14 @@
 package main.database;
 
+/**
+ * Classe che contiene informazioni riguardanti una teca
+ * @author Simone Raffo
+ */
 public class Teca {
 
     private int codice;
     private String descrizione;
     private int sala;
-
-    /*public Teca(int codice, String descrizione) {
-        this.codice = codice;
-        this.descrizione = descrizione;
-    }*/
 
     public int getCodice() {
         return codice;

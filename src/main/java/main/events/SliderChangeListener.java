@@ -8,6 +8,10 @@ import javax.swing.event.ChangeListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * Classe che aggiorna la traccia in caso venga cambiato il valore dello slider in caso tramite il click dell'utente sullo slider
+ * @author Daniele Pelizzoni
+ */
 public class SliderChangeListener implements ChangeListener {
 
     private final AudioManager audioManager;

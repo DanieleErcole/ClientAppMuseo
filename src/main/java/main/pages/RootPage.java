@@ -10,8 +10,8 @@ import java.util.HashMap;
 import javax.swing.*;
 
 /**
- *
- * @author User
+ * Classe che rappresenta la finestra principale dell'applicazione
+ * @author Daniele Pelizzoni
  */
 public class RootPage extends JFrame {
 

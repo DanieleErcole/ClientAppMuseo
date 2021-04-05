@@ -11,13 +11,21 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-
+/**
+ * Classe che gestisce le richieste dei file, delle immagini e degli oggetti al server
+ * @author Daniele Pelizzoni e Simone Raffo
+ */
 public class DataManager {
 
     private final String hostname;
     private String url;
     private HttpURLConnection httpConnection;
 
+    /**
+     * Costruttore degli oggetti di classe DataManager
+     * @param hostname nome del server
+     * @param url percorso del file php da richiedere
+     */
     public DataManager(String hostname, String url) {
         this.hostname = hostname;
         this.url = url;
@@ -53,6 +61,12 @@ public class DataManager {
         return object;
     }
 
+    /**
+     * Metodo che richiede un'immagine al server
+     * @param url url dell'immagine
+     * @return l'immagine richiesta
+     * @throws IOException
+     */
     public Image requestImage(String url) throws IOException {
         StringBuilder requestUrl = new StringBuilder("http://" + hostname + ":80/TestAppMuseo/Risorse/Immagini/" + url);
         InputStream stream;
@@ -65,8 +79,15 @@ public class DataManager {
         return img;
     }
 
-    public URL requestFile(String url, String directory) throws MalformedURLException {
-        StringBuilder requestUrl = new StringBuilder("http://" + hostname + ":80/TestAppMuseo/Risorse/" + directory + "/" + url);
+    /**
+     * Metodo che richiede un file al server
+     * @param name nome del file
+     * @param directory directory del serve dentro la quale cercare (definisce il tipo di file)
+     * @return percorso del file
+     * @throws MalformedURLException
+     */
+    public URL requestFile(String name, String directory) throws MalformedURLException {
+        StringBuilder requestUrl = new StringBuilder("http://" + hostname + ":80/TestAppMuseo/Risorse/" + directory + "/" + name);
         return new URL(requestUrl.toString());
     }
 

@@ -10,6 +10,10 @@ import javax.swing.*;
 import java.io.IOException;
 import java.net.URL;
 
+/**
+ * Classe che gestisce la riproduzione delle tracce audio associate ad un reperto
+ * @author Daniele Pelizzoni
+ */
 public class AudioManager {
 
     private final Mixer mixer; // Dispositivo audio
@@ -25,6 +29,11 @@ public class AudioManager {
         mixer = AudioSystem.getMixer(infos[3]);
     }
 
+    /**
+     * Metodo che inizializza il timer che aggiornerà lo slider
+     * @param root finestra principale, che contiene il riferimento allo slider
+     * @param sliderChangeListener changelistener associato allo slider
+     */
     public void initAudioTimer(RootPage root, SliderChangeListener sliderChangeListener) {
         AudioTimerListener audioTimerListener = new AudioTimerListener(sliderChangeListener, this, root);
         audioTimer = new Timer(100, audioTimerListener);
@@ -32,7 +41,8 @@ public class AudioManager {
 
     /**
      * Metodo che fa partire la clip audio con il nome dato
-     * @param path -> nome della clip audio
+     * @param path url clip audio
+     * @param index indice della clip audio
      */
     public void addTrack(URL path, int index) {
         try {
@@ -53,12 +63,18 @@ public class AudioManager {
         });
     }
 
+    /**
+     * Metodo che inizializza la riproduzione della traccia successiva (lingua diversa) del reperto
+     */
     public void next() {
         int currentTrackIndex = currentTrack.getIndex() + 1 < find.getUrlAudioguide().size() ? currentTrack.getIndex() + 1 : 0;
         this.stopTrack();
         this.addTrack(find.getUrlAudioguide().get(currentTrackIndex), currentTrackIndex);
     }
 
+    /**
+     * Metodo che inizializza la riproduzione della traccia precendente (lingua diversa) del reperto
+     */
     public void previous() {
         int currentTrackIndex = currentTrack.getIndex() - 1 >= 0 ? currentTrack.getIndex() - 1 : find.getUrlAudioguide().size() - 1;
         this.stopTrack();

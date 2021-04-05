@@ -6,6 +6,10 @@ import main.PageManager;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+/**
+ * Classe che rileva il click dell'utente sullo slider
+ * @author Daniele Pelizzoni
+ */
 public class SliderMouseListener extends MouseAdapter {
 
     private final PageManager pageManager;

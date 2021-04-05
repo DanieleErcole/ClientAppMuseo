@@ -10,8 +10,8 @@ import java.awt.*;
 import javax.swing.*;
 
 /**
- *
- * @author User
+ * Classe che rappresenta la pagina di registrazione
+ * @author Daniele Pelizzoni
  */
 public class SignUpPage extends Page {
     

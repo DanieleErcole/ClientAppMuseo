@@ -5,6 +5,10 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.Timestamp;
 
+/**
+ * Classe che rappresenta una traccia audio
+ * @author Daniele Pelizzoni
+ */
 public class AudioTrack {
 
     private final URL clipURL;
@@ -18,9 +22,11 @@ public class AudioTrack {
 
     /**
      * Costruttore degli oggetti di classe AudioTrack
-     * @param thisClip -> clip audio da riprodurre
-     * @param thisStream -> stream audio che riproduce la traccia
-     * @param volume -> livello di volume
+     * @param thisClip clip audio da riprodurre
+     * @param thisStream stream audio che riproduce la traccia
+     * @param volume livello di volume
+     * @param url url della traccia audio
+     * @param index indice della traccia audio
      */
     public AudioTrack(Clip thisClip, AudioInputStream thisStream, float volume, URL url, int index) {
         this.thisClip = thisClip;
@@ -40,16 +46,25 @@ public class AudioTrack {
         currentFrame = 0;
     }
 
+    /**
+     * Metodo che inizia la riproduzione della traccia
+     */
     public void start() {
         if(thisStream != null)
             thisClip.start();
     }
 
+    /**
+     * Metodo che mette in pausa la traccia
+     */
     public void pause() {
         currentFrame = thisClip.getFramePosition();
         thisClip.stop();
     }
 
+    /**
+     * Metodo che riprende la riproduzione della traccia
+     */
     public void resume() {
         if(!thisClip.isOpen() || !thisClip.isActive()) {
             thisClip.close();
@@ -64,6 +79,9 @@ public class AudioTrack {
         }
     }
 
+    /**
+     * Metodo che ferma la riproduzione della traccia
+     */
     public void stop() {
         if(thisClip.isRunning() || thisClip.isActive() || thisClip.isOpen()) {
             thisClip.stop();
@@ -77,10 +95,6 @@ public class AudioTrack {
     }
 
     //Getter
-    public float getVolume() {
-        return volume;
-    }
-
     public Timestamp getDuration() {
         return duration;
     }
@@ -91,10 +105,6 @@ public class AudioTrack {
 
     public URL getClipURL() {
         return clipURL;
-    }
-
-    public int getCurrentFrame() {
-        return currentFrame;
     }
 
     public int getIndex() {

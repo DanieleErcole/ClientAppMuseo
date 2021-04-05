@@ -10,8 +10,8 @@ import java.awt.*;
 import javax.swing.*;
 
 /**
- *
- * @author User
+ * Classe che rappresenta la pagina di login
+ * @author Daniele Pelizzoni e Simone Raffo
  */
 public class LoginPage extends Page {
     

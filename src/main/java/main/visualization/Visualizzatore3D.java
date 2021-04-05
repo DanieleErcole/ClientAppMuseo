@@ -14,6 +14,10 @@ import java.net.URL;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
+/**
+ * Classe che gestisce la visualizzazione di un modello 3D
+ * @author Daniele Pelizzoni
+ */
 public class Visualizzatore3D extends Canvas3D {
 
     private final URL currentModel;
@@ -21,17 +25,27 @@ public class Visualizzatore3D extends Canvas3D {
     private BranchGroup scene;
     private final float eyeOffset;
 
+    /**
+     * Costruttoree degli oggetti di class Visualizzatore 3D
+     * @param currentModel url del modello da visualizzare
+     * @param width larghezza del canvas
+     * @param height altezza del canvas
+     */
     public Visualizzatore3D(URL currentModel, int width, int height) {
         super(SimpleUniverse.getPreferredConfiguration());
         this.currentModel = currentModel;
         eyeOffset = 0.03f;
         this.setSize(width, height);
-        scene = createSceneGraph(0);
+        scene = createScene();
         universe = new SimpleUniverse(this);
         universe.addBranchGraph(scene);
     }
 
-    public BranchGroup createSceneGraph(int i) {
+    /**
+     * Metodo che inizializza la visualizzazione del modello
+     * @return
+     */
+    public BranchGroup createScene() {
         BranchGroup objRoot = new BranchGroup();
         try{
             Transform3D myTransform3D = new Transform3D();
@@ -74,12 +88,10 @@ public class Visualizzatore3D extends Canvas3D {
                 mytg.addChild(new Shape3D(shape.getGeometry(),ap));
             }
 
-            BoundingSphere bounds =
-                    new BoundingSphere(new Point3d(0.0,0.0,0.0), 100.0);
+            BoundingSphere bounds = new BoundingSphere(new Point3d(0.0,0.0,0.0), 100.0);
             Color3f light1Color = new Color3f(.9f, 0.9f, 0.9f);
             Vector3f light1Direction  = new Vector3f(4.0f, -7.0f, -12.0f);
-            DirectionalLight light1
-                    = new DirectionalLight(light1Color, light1Direction);
+            DirectionalLight light1 = new DirectionalLight(light1Color, light1Direction);
             light1.setInfluencingBounds(bounds);
             objTrans.addChild(light1);
 

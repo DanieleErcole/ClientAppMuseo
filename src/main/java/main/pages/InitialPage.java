@@ -7,8 +7,8 @@ import main.database.DataManager;
 import main.events.ButtonActionManager;
 
 /**
- *
- * @author User
+ * Classe che rappresenta la pagina iniziale dell'applicazione
+ * @author Daniele Pelizzoni e Simone Raffo
  */
 public class InitialPage extends Page {
 

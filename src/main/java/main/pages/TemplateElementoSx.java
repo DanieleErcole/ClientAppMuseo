@@ -16,8 +16,8 @@ import java.io.IOException;
 import java.util.HashMap;
 
 /**
- *
- * @author raffo
+ * Classe che rappresenta un elemento selezionabile
+ * @author Simone Raffo
  */
 public class TemplateElementoSx extends Page {
 

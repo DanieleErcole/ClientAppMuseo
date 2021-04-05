@@ -6,8 +6,8 @@
 package main.database;
 
 /**
- *
- * @author raffo
+ * Classe che contiene informazioni riguardanti una specie
+ * @author Simone Raffo
  */
 public class Specie {
 
@@ -18,17 +18,6 @@ public class Specie {
     private String classe;
     private String phylum;
     private String regno;
-    
-    /*public Specie(String nome, String genere, String famiglia, String ordine, String classe, String phylum, String regno, int probabilità){
-        this.nome = nome;
-        this.genere = genere;
-        this.famiglia = famiglia;
-        this.ordine = ordine;
-        this.classe = classe;
-        this.phylum = this.phylum;
-        this.regno = regno;
-        this.probabilità = probabilità;
-    }*/
     
     public String getNome(){
         return nome;

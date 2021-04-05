@@ -1,16 +1,14 @@
 package main.database;
 
+/**
+ * Classe che contiene informazioni riguardanti un tipo di biglietto
+ * @author Simone Raffo
+ */
 public class TicketType {
 
     private String nome;
     private int durata;
     private double prezzo;
-
-    /*public TicketType(String nome, int durata, double prezzo) {
-        this.nome = nome;
-        this.durata = durata;
-        this.prezzo = prezzo;
-    }*/
 
     public String getNome() {
         return nome;

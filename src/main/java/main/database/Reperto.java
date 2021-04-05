@@ -5,8 +5,8 @@ import java.net.URL;
 import java.util.ArrayList;
 
 /**
- *
- * @author raffo
+ * Classe che contiene informazioni riguardanti un reperto
+ * @author Simone Raffo
  */
 public class Reperto {
 

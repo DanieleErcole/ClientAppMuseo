@@ -8,6 +8,10 @@ import java.awt.event.ActionListener;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
+/**
+ * Classe che aggiorna lo slider in abse alla traccia in riproduzione (verrà utilizzata da un timer)
+ * @author Daniele Pelizzoni
+ */
 public class AudioTimerListener implements ActionListener {
 
     private final SliderChangeListener changeListener;

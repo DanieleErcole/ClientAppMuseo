@@ -1,15 +1,14 @@
 package main.database;
 
+/**
+ * Classe che contiene informazioni riguardanti un periodo storico
+ * @author Simone Raffo
+ */
 public class HistoricalPeriod {
 
     private String nome;
     private String anno;
     private String descrizione;
-
-    /*public HistoricalPeriod(String nome, String anno) {
-        this.nome = nome;
-        this.anno = anno;
-    }*/
 
     public String getNome() {
         return nome;

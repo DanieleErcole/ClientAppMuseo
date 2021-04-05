@@ -20,8 +20,8 @@ import java.util.HashMap;
 import javax.swing.*;
 
 /**
- *
- * @author raffo
+ * Classe che rappresenta la pagina che contiene le informazioni sul reperto
+ * @author Simone Raffo
  */
 public class PaginaInformazioniReperto extends Page {
 

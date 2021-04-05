@@ -9,8 +9,8 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- *
- * @author raffo
+ * Classe che rappresenta un elemento dell'elenco di audioguide
+ * @author Simone Raffo
  */
 public class TemplateAudioguida extends JPanel {
 

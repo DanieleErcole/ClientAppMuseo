@@ -9,6 +9,10 @@ import main.pages.*;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Classe principale dell'applicazione, si occupa dell'inizializzazione e dell'avvio della stessa
+ * @author Daniele Pelizzoni e Simone Raffo
+ */
 public class MainApp {
 
     private final PageManager pageManager;

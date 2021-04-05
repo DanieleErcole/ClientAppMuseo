@@ -11,8 +11,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- *
- * @author raffo
+ * Classe che rappresenta la pagina che permette la selezione di sale, teche o reperti
+ * @author Simone Raffo
  */
 public class PaginaSelezione extends Page {
 

@@ -6,6 +6,10 @@ import main.events.ButtonActionManager;
 import main.pages.Page;
 import main.pages.RootPage;
 
+/**
+ * Classe che gestisce le pagine all'interno della finestra principale
+ * @author Daniele Pelizzoni e Simone Raffo
+ */
 public class PageManager {
 
     private final DataManager dataManager;

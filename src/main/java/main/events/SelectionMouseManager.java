@@ -9,6 +9,10 @@ import main.pages.PaginaSelezione;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+/**
+ * Classe che gestisce gli eventi riguardanti la selezione di sale, teche e reperti
+ * @author Daniele Pelizzoni e Simone Raffo
+ */
 public class SelectionMouseManager extends MouseAdapter {
 
     private final AudioManager audioManager;
